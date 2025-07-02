@@ -52,8 +52,12 @@ const fetchHelper = {
         if (method.toLocaleLowerCase() !== "get") {
             options = {
                 method: method,
+                cache: "no-cache",
+                headers: {},
                 body: params,
             };
+
+            console.log(`options: %o`, options);
         }
 
         if (typeof loader == 'string') {
