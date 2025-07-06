@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @SpringBootTest
@@ -53,6 +52,54 @@ public class MemberMapperTests {
         Member input = new Member();
         input.setUserId("hellouser");
         int output = memberMapper.selectCount(input);
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void login() {
+        // 테스트용 로그인 정보 생성
+        Member input = new Member();
+        input.setUserId("testuser");
+        input.setUserPw("testpw123");
+
+        // login 실행
+        Member output = memberMapper.login(input);
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void updateLoginDate() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(5); // 존재하는 회원의 ID로 설정
+
+        // updateLoginDate 실행
+        int output = memberMapper.updateLoginDate(input);
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void findId() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setUserName("테스트유저1");
+        input.setEmail("leekh4232@gmail.com");
+
+        // findId 실행
+        Member output = memberMapper.findId(input);
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void resetPassword() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setUserId("testuser1");
+        input.setEmail("leekh4232@gmail.com");
+        input.setUserPw("1234"); // 새 비밀번호 설정
+
+        // resetPassword 실행
+        int output = memberMapper.resetPw(input);
         log.debug("output:{}", output);
     }
 }

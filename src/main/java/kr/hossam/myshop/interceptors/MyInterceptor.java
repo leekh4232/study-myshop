@@ -3,8 +3,8 @@ package kr.hossam.myshop.interceptors;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.hossam.myshop.helpers.WebHelper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,6 +15,7 @@ import java.util.Map;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class MyInterceptor implements HandlerInterceptor {
     /** 페이지의 실행 시작 시각을 저장할 변수 */
     long startTime = 0;
@@ -23,17 +24,7 @@ public class MyInterceptor implements HandlerInterceptor {
     long endTime = 0;
 
     /** WebHelper 객체 */
-    private WebHelper webHelper;
-
-    /**
-     * 생성자
-     * WebHelper 객체를 주입받는다.
-     * @param webHelper - WebHelper 객체
-     */
-    @Autowired
-    public MyInterceptor(WebHelper webHelper) {
-        this.webHelper = webHelper;
-    }
+    private final WebHelper webHelper;
 
     /**
      * Controller 실행 전에 수행되는 메서드

@@ -3,8 +3,8 @@ package kr.hossam.myshop.helpers;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,21 +16,17 @@ import java.nio.charset.StandardCharsets;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class WebHelper {
 
-    private HttpServletRequest request;
-    private HttpServletResponse response;
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
 
+    @Value("${spring.cookie.domain}")
     private String cookieDomain; // 기본 도메인 설정 (필요시 설정 가능)
-    private String cookiePath; // 기본 경로 설정
 
-    @Autowired
-    public WebHelper(HttpServletRequest request, HttpServletResponse response,
-                     @Value("${spring.cookie.domain}") String cookieDomain,
-                     @Value("${spring.cookie.path}") String cookiePath) {
-        this.request = request;
-        this.response = response;
-    }
+    @Value("${spring.cookie.path}")
+    private String cookiePath; // 기본 경로 설정
 
     /**
      * 클라이언트의 IP 주소를 가져오는 메서드

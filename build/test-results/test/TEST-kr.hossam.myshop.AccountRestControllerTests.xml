@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="kr.hossam.myshop.AccountRestControllerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-07-02T15:37:56.339Z" hostname="igwanghoui-MacStudio.local" time="0.527">
+<testsuite name="kr.hossam.myshop.AccountRestControllerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-07-06T16:44:00" hostname="igwanghoui-MacStudio.local" time="0.545">
   <properties/>
-  <testcase name="emailUniqueCheck()" classname="kr.hossam.myshop.AccountRestControllerTests" time="0.527"/>
-  <system-out><![CDATA[00:37:55.100 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [kr.hossam.myshop.AccountRestControllerTests]: AccountRestControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-00:37:55.140 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration kr.hossam.myshop.MyschopApplication for test class kr.hossam.myshop.AccountRestControllerTests
+  <testcase name="emailUniqueCheck()" classname="kr.hossam.myshop.AccountRestControllerTests" time="0.545"/>
+  <system-out><![CDATA[01:43:59.026 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [kr.hossam.myshop.AccountRestControllerTests]: AccountRestControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+01:43:59.071 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration kr.hossam.myshop.MyschopApplication for test class kr.hossam.myshop.AccountRestControllerTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -14,29 +14,66 @@
 
  :: Spring Boot ::                (v3.3.5)
 
-[INFO ] 25-07-03 00:37:55 [AccountRestControllerTests:50] - Starting AccountRestControllerTests using Java 21.0.7 with PID 61764 (started by leekh in /Users/leekh/study-myshop)
-[DEBUG] 25-07-03 00:37:55 [AccountRestControllerTests:51] - Running with Spring Boot v3.3.5, Spring v6.1.14
-[INFO ] 25-07-03 00:37:55 [AccountRestControllerTests:654] - No active profile set, falling back to 1 default profile: "default"
-[INFO ] 25-07-03 00:37:56 [AccountRestControllerTests:56] - Started AccountRestControllerTests in 1.115 seconds (process running for 1.532)
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:49] - ---------- new client connect ------------
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:69] - [Client] 127.0.0.1, Mac, Mac OS X 10.15, Chrome 126.0
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:87] - [GET] http://localhost/api/account/email_unique_check
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:94] - (param) <-- email = testuser@gmail.com
-[DEBUG] 25-07-03 00:37:56 [selectCount:135] - ==>  Preparing: SELECT COUNT(*) FROM members WHERE email = ?
-[DEBUG] 25-07-03 00:37:56 [selectCount:135] - ==> Parameters: testuser@gmail.com(String)
-[INFO ] 25-07-03 00:37:56 [sqlonly:228] - SELECT COUNT(*) FROM members WHERE email = 'testuser@gmail.com'
+[INFO ] 25-07-07 01:43:59 [AccountRestControllerTests:50] - Starting AccountRestControllerTests using Java 21.0.7 with PID 50751 (started by leekh in /Users/leekh/study-myshop)
+[DEBUG] 25-07-07 01:43:59 [AccountRestControllerTests:51] - Running with Spring Boot v3.3.5, Spring v6.1.14
+[INFO ] 25-07-07 01:43:59 [AccountRestControllerTests:654] - No active profile set, falling back to 1 default profile: "default"
+[INFO ] 25-07-07 01:44:00 [AccountRestControllerTests:56] - Started AccountRestControllerTests in 1.306 seconds (process running for 1.754)
+[INFO ] 25-07-07 01:44:00 [MyInterceptor:40] - ---------- new client connect ------------
+[INFO ] 25-07-07 01:44:00 [MyInterceptor:60] - [Client] 127.0.0.1, Mac, Mac OS X 10.15, Chrome 126.0
+[INFO ] 25-07-07 01:44:00 [MyInterceptor:78] - [GET] http://localhost/api/account/email_unique_check
+[INFO ] 25-07-07 01:44:00 [MyInterceptor:85] - (param) <-- email = testuser@gmail.com
+[DEBUG] 25-07-07 01:44:00 [selectCount:135] - ==>  Preparing: SELECT COUNT(*) FROM members WHERE email = ?
+[DEBUG] 25-07-07 01:44:00 [selectCount:135] - ==> Parameters: testuser@gmail.com(String)
+[INFO ] 25-07-07 01:44:00 [sqlonly:228] - SELECT COUNT(*) FROM members WHERE email = 'testuser@gmail.com'
 
-[INFO ] 25-07-03 00:37:56 [resultsettable:610] - 
+[INFO ] 25-07-07 01:44:00 [resultsettable:610] - 
 |---------|
 |count(*) |
 |---------|
 |0        |
 |---------|
 
-[DEBUG] 25-07-03 00:37:56 [selectCount:135] - <==      Total: 1
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:124] - running time: 135(ms)
-[DEBUG] 25-07-03 00:37:56 [AccountRestControllerTests:85] - 응답 상태코드: 200
-[DEBUG] 25-07-03 00:37:56 [AccountRestControllerTests:86] - 응답 JSON 전문: {"status":200,"message":"OK","timestamp":"2025-07-03T00:37:56.846638"}
+[DEBUG] 25-07-07 01:44:00 [selectCount:135] - <==      Total: 1
+[INFO ] 25-07-07 01:44:01 [MyInterceptor:115] - running time: 139(ms)
+
+MockHttpServletRequest:
+      HTTP Method = GET
+      Request URI = /api/account/email_unique_check
+       Parameters = {email=[testuser@gmail.com]}
+          Headers = [Accept:"application/json", User-Agent:"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36"]
+             Body = null
+    Session Attrs = {}
+
+Handler:
+             Type = kr.hossam.myshop.controllers.apis.AccountRestController
+           Method = kr.hossam.myshop.controllers.apis.AccountRestController#EmailUniqueCheck(String, Member)
+
+Async:
+    Async started = false
+     Async result = null
+
+Resolved Exception:
+             Type = null
+
+ModelAndView:
+        View name = null
+             View = null
+            Model = null
+
+FlashMap:
+       Attributes = null
+
+MockHttpServletResponse:
+           Status = 200
+    Error message = null
+          Headers = [Content-Type:"application/json; charset=UTF-8", Access-Control-Allow-Methods:"POST, GET, PUT, DELETE", Access-Control-Max-Age:"3600", Access-Control-Allow-Headers:"x-requested-with", Access-Control-Allow-Origin:"*"]
+     Content type = application/json; charset=UTF-8
+             Body = {"status":200,"message":"OK","timestamp":"2025-07-07T01:44:00.991948"}
+    Forwarded URL = null
+   Redirected URL = null
+          Cookies = []
+[DEBUG] 25-07-07 01:44:01 [RestApiTestHelper:91] - 응답 상태코드: 200
+[DEBUG] 25-07-07 01:44:01 [RestApiTestHelper:92] - 응답 JSON 전문: {"status":200,"message":"OK","timestamp":"2025-07-07T01:44:00.991948"}
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

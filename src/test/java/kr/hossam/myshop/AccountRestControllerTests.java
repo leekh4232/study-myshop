@@ -1,71 +1,104 @@
 package kr.hossam.myshop;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import org.springframework.mock.web.MockMultipartFile;
+import kr.hossam.myshop.helpers.RestApiTestHelper;
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AccountRestControllerTests {
-    // 테스트 관련 세팅
     @Autowired
-    WebApplicationContext webApplicationContext;
+    private RestApiTestHelper restApiTestHelper;
 
-    @Autowired
-    private MockMvc mockMvc;
-
-    @BeforeEach
-    public void setUp(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
+    /** 아이디 중복 체크 API 테스트 */
     @Test
     void idUniqueCheck() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/account/id_unique_check")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
-                        .param("user_id", "testuser"))
-                //.andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
-
-        MockHttpServletResponse response = result.getResponse();
-        int status = response.getStatus();
-        String responseJson = response.getContentAsString();
-
-        log.debug("응답 상태코드: {}", status);
-        log.debug("응답 JSON 전문: {}", responseJson);
+        Map<String, Object> params = Map.of("user_id", "testuser123");
+        restApiTestHelper.test("GET", "/api/account/id_unique_check", params, null);
     }
 
+    /** 이메일 중복 체크 API 테스트 */
     @Test
     void emailUniqueCheck() throws Exception {
-        MvcResult result = mockMvc.perform(get("/api/account/email_unique_check")
-                        .accept(MediaType.APPLICATION_JSON)
-                        .header("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36")
-                        .param("email", "testuser@gmail.com"))
-                //.andDo(print())
-                .andExpect(status().isOk())
-                .andReturn();
+        Map<String, Object> params = Map.of("email", "testuser@gmail.com");
+        restApiTestHelper.test("GET", "/api/account/email_unique_check", params, null);
+    }
 
-        MockHttpServletResponse response = result.getResponse();
-        int status = response.getStatus();
-        String responseJson = response.getContentAsString();
+    /** 회원가입 API 테스트 */
+    @Test
+    void join() throws Exception {
+        // 1. 업로드할 파일 구성
+        String inputFieldName = "photo"; //파일 업로드 파라미터 이름
+        String fileType = "image/jpeg"; //파일타입
+        String filePath = "/Users/leekh/Desktop/test.png"; //파일경로
+        File file = new File(filePath);
+        FileInputStream fileInputStream = new FileInputStream(file);
 
-        log.debug("응답 상태코드: {}", status);
-        log.debug("응답 JSON 전문: {}", responseJson);
+        MockMultipartFile image1 = new MockMultipartFile(
+                inputFieldName,
+                file.getName(),
+                fileType,
+                fileInputStream
+        );
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_id", "hellotest1");
+        params.put("user_pw", "1234");
+        params.put("user_pw_re", "1234");
+        params.put("user_name", "헬로테스트");
+        params.put("email", "hellotest1@naver.com");
+        params.put("phone", "01012345678");
+        params.put("birthday", "2025-07-03");
+        params.put("gender", "M");
+        params.put("postcode", "12345");
+        params.put("addr1", "서울시 어딘가");
+        params.put("addr2", "어디이겠지");
+
+        restApiTestHelper.test("POST", "/api/account/join", params, image1);
+    }
+
+    /** 로그인 API 테스트 */
+    @Test
+    void login() throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_id", "hellotest1");
+        params.put("user_pw", "1234");
+
+        restApiTestHelper.test("POST", "/api/account/login", params, null);
+    }
+
+    /** 로그아웃 테스트 */
+    @Test
+    void logout() throws Exception {
+        restApiTestHelper.test("GET", "/api/account/logout", null, null);
+    }
+
+    /** 아이디 찾기 테스트 */
+    @Test
+    void findId() throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_name", "헬로테스트");
+        params.put("email", "leekh4232@gmail.com");
+
+        restApiTestHelper.test("POST", "/api/account/find_id", params, null);
+    }
+
+    /** 비밀번호 재발급 테스트 */
+    @Test
+    void resetPw() throws Exception {
+        Map<String, Object> params = new HashMap<>();
+        params.put("user_id", "hellotest1");
+        params.put("email", "leekh4232@gmail.com");
+
+        restApiTestHelper.test("PUT", "/api/account/reset_pw", params, null);
     }
 }

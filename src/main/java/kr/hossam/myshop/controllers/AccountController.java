@@ -29,12 +29,52 @@ public class AccountController {
     }
 
     /**
-     * 회원가입 결과 페이지로 이동
+     * 회원가입 결과 페이지
      *
      * @return 회원가입 결과 페이지의 뷰 이름
      */
     @GetMapping("/account/join_result")
     public String joinResult() {
         return "account/join_result";
+    }
+
+    /**
+     * 로그인 페이지
+     *
+     * @return 로그인 페이지의 뷰 이름
+     */
+    @GetMapping("/account/login")
+    public String login() {
+        return "account/login";
+    }
+
+    /**
+     * 회원 탈퇴 페이지
+     *
+     * @return 회원 탈퇴 페이지의 뷰 이름
+     */
+    @GetMapping("/account/out")
+    public String out() {
+        return "account/out";
+    }
+
+    /**
+     * 아이디 찾기 페이지
+     *
+     * @return 아이디 찾기 페이지의 뷰 이름
+     */
+    @GetMapping("/account/find_id")
+    public String findId() {
+        return "account/find_id";
+    }
+
+    /**
+     * 비밀번호 재설정 페이지
+     *
+     * @return 비밀번호 재설정 페이지의 뷰 이름
+     */
+    @GetMapping("/account/reset_pw")
+    public String resetPw() {
+        return "account/reset_pw";
     }
 }
