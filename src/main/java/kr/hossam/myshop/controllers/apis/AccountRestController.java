@@ -1,5 +1,6 @@
 package kr.hossam.myshop.controllers.apis;
 
+import jakarta.servlet.http.HttpSession;
 import kr.hossam.myshop.exceptions.StringFormatException;
 import kr.hossam.myshop.helpers.FileHelper;
 import kr.hossam.myshop.helpers.RegexHelper;
@@ -10,7 +11,8 @@ import kr.hossam.myshop.services.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
+import jakarta.servlet.http.HttpServletRequest;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
@@ -178,4 +180,82 @@ public class AccountRestController {
         /** 5) 결과 반환 */
         return restHelper.sendJson();
     }
+
+    /**
+     * 회원 로그인 처리
+     * @param userId    회원 아이디
+     * @param userPw    회원 비밀번호
+     * @return          로그인 결과에 대한 JSON 응답
+     * @throws Exception 입력값 유효성 검사 실패 또는 로그인 처리 중 예외 발생 시
+     */
+    @PostMapping("/api/account/login")
+    public Map<String, Object> login(
+            HttpServletRequest request,
+            @RequestParam("user_id") String userId,
+            @RequestParam("user_pw") String userPw) throws Exception {
+
+        // 입력값에 대한 유효성 검사
+        regexHelper.isValue(userId, "아이디를 입력하세요.");
+        regexHelper.isValue(userPw, "비밀번호를 입력하세요.");
+
+        // 로그인 정보 설정
+        Member input = new Member();
+        input.setUserId(userId);
+        input.setUserPw(userPw);
+
+        // 로그인 처리
+        Member output = memberService.login(input);
+
+        // 세션에 회원 정보 저장
+        request.getSession().setAttribute("memberInfo", output);
+
+        // 결과 반환
+        return restHelper.sendJson();
+    }
+
+    /**
+     * 로그아웃 처리
+     * @param request   HTTP 요청 객체
+     * @return          로그아웃 결과에 대한 JSON 응답
+     */
+    @GetMapping("/api/account/logout")
+    public Map<String, Object> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+        return restHelper.sendJson();
+    }
+
+    /**
+     * 회원 아이디 찾기
+     * @param userName  회원 이름
+     * @param email     회원 이메일
+     * @return          찾은 회원 아이디에 대한 JSON 응답
+     * @throws Exception 입력값 유효성 검사 실패 또는 아이디 찾기 처리 중 예외 발생 시
+     */
+    @PostMapping("/api/account/find_id")
+    public Map<String, Object> findId(
+            @RequestParam("user_name") String userName,
+            @RequestParam("email") String email) throws Exception {
+
+        // 입력값에 대한 유효성 검사
+        regexHelper.isValue(userName, "이름을 입력하세요.");
+        regexHelper.isValue(email, "이메일을 입력하세요.");
+        regexHelper.isEmail(email, "이메일 형식이 잘못되었습니다.");
+
+        // 아이디 찾기에 사용할 Member 객체 생성
+        Member input = new Member();
+        input.setUserName(userName);
+        input.setEmail(email);
+
+        // 아이디 찾기 처리
+        Member output = memberService.findId(input);
+
+        // 결과 반환
+        Map<String, Object> data = new LinkedHashMap<String, Object>();
+        data.put("user_id", output.getUserId());
+
+        return restHelper.sendJson(data);
+    }
+
+
 }

@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor    // <-- 생성자 주입을 위한 어노테이션
+@RequiredArgsConstructor // <-- 생성자 주입을 위한 어노테이션
 public class MemberServiceImpl implements MemberService {
     private final MemberMapper memberMapper;
 
@@ -49,5 +49,39 @@ public class MemberServiceImpl implements MemberService {
 
         // 가입된 회원 정보를 반환
         return memberMapper.selectItem(input);
+    }
+
+    @Override
+    public Member login(Member input) throws Exception {
+        // 입력된 아이디와 비밀번호로 회원 정보 조회
+        Member output = memberMapper.login(input);
+
+        // 조회된 회원 정보가 없으면 예외 발생
+        if (output == null) {
+            throw new ServiceNoResultException("아이디 또는 비밀번호가 일치하지 않습니다.");
+        }
+
+        // 로그인 성공 시 마지막 로그인 일시 업데이트
+        memberMapper.updateLoginDate(output);
+
+        return output;
+    }
+
+    @Override
+    public Member findId(Member input) throws Exception {
+        Member output = memberMapper.findId(input);
+
+        if (output == null) {
+            throw new Exception("조회된 아이디가 없습니다.");
+        }
+
+        return output;
+    }
+
+    @Override
+    public void resetPw(Member input) throws Exception {
+        if (memberMapper.resetPw(input) == 0) {
+            throw new Exception("아이디와 이메일을 확인하세요.");
+        }
     }
 }

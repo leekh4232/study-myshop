@@ -1,64 +1,75 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <th:block th:replace="~{_fragments/_head :: my-head('회원가입')}"/>
-    <link rel="stylesheet" th:href="@{/assets/css/account.css}"/>
+    <th:block th:replace="~{_fragments/_head :: my-head('회원가입')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/account.css}" />
 </head>
+
 <body>
+    <!-- 로딩바 -->
+    <img th:src="@{/assets/img/loading.gif}" id="loading" style="width: 100px; height: 100px; position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none"/>
+
+    <!-- 회원가입 폼 -->
     <div class="account-container">
         <h2 class="page-title">회원가입</h2>
         <form id="signup-form">
             <!-- 아이디 -->
             <div class="input-container">
-                <input class="input-field" id="user_id" name="user_id" placeholder="아이디" type="text" value="test1"/>
+                <input class="input-field" id="user_id" name="user_id" placeholder="아이디" type="text" value="test1" />
                 <button class="inline-btn" id="id_unique_check" type="button">중복 검사</button>
-                <input id="id_check" name="id_check" type="hidden" value="N"/>
+
+                <!-- 아이디 중복검사를 수행했는지 여부를 의미하는 hidden 요소 (N=검사안함,Y=검사함)-->
+                <input id="id_check" name="id_check" type="hidden" value="N" />
             </div>
 
             <!-- 비밀번호 -->
             <div class="input-container">
-                <input class="input-field" id="user_pw" name="user_pw" placeholder="비밀번호" type="password" value="1234"/>
+                <input class="input-field" id="user_pw" name="user_pw" placeholder="비밀번호" type="password"
+                    value="1234" />
             </div>
 
             <!-- 비밀번호 확인 -->
             <div class="input-container">
-                <input class="input-field" id="user_pw_re" name="user_pw_re" placeholder="비밀번호 확인"
-                       type="password" value="1234"/>
+                <input class="input-field" id="user_pw_re" name="user_pw_re" placeholder="비밀번호 확인" type="password"
+                    value="1234" />
             </div>
 
             <!-- 이름 -->
             <div class="input-container">
-                <input class="input-field" id="user_name" name="user_name" placeholder="이름" type="text" value="테스트"/>
+                <input class="input-field" id="user_name" name="user_name" placeholder="이름" type="text" value="테스트" />
             </div>
 
             <!-- 이메일 -->
             <div class="input-container">
                 <input class="input-field" id="email" name="email" placeholder="이메일" type="email"
-                       value="test1@naver.com"/>
+                    value="test1@naver.com" />
                 <button class="inline-btn" id="email_unique_check" type="button">중복 검사</button>
-                <input id="email_check" name="email_check" type="hidden" value="N"/>
+
+                <!-- 이메일 중복검사를 수행했는지 여부를 의미하는 hidden 요소 (N=검사안함,Y=검사함)-->
+                <input id="email_check" name="email_check" type="hidden" value="N" />
             </div>
 
             <!-- 전화번호 -->
             <div class="input-container">
-                <input class="input-field" id="phone" name="phone" placeholder="전화번호" type="tel" value="01012345678"/>
+                <input class="input-field" id="phone" name="phone" placeholder="전화번호" type="tel" value="01012345678" />
             </div>
 
             <!-- 생년월일 -->
             <div class="input-container">
                 <input class="input-field" id="birthday" name="birthday" placeholder="생년월일" type="date"
-                       value="2020-01-01"/>
+                    value="2020-01-01" />
             </div>
 
             <!-- 성별 (라디오 버튼 형태) -->
             <div class="input-container gender-container">
                 <span>성별:</span>
                 <label class="gender-label">
-                    <input checked class="gender-input" name="gender" type="radio" value="M"/>
+                    <input checked class="gender-input" name="gender" type="radio" value="M" />
                     <span class="gender-custom"></span>남성
                 </label>
                 <label class="gender-label">
-                    <input class="gender-input" name="gender" type="radio" value="F"/>
+                    <input class="gender-input" name="gender" type="radio" value="F" />
                     <span class="gender-custom"></span>여성
                 </label>
             </div>
@@ -66,22 +77,22 @@
             <!-- 우편번호 -->
             <div class="input-container">
                 <input class="input-field" id="postcode" name="postcode" placeholder="우편번호" readonly type="text"
-                       value="12345"/>
+                    value="12345" />
                 <button class="inline-btn" id="find-postocde" type="button">우편번호 찾기</button>
             </div>
 
             <!-- 주소 -->
             <div class="input-container">
                 <input class="input-field" id="addr1" name="addr1" placeholder="주소" readonly type="text"
-                       value="서울시 어딘가"/>
+                    value="서울시 어딘가" />
             </div>
             <div class="input-container">
-                <input class="input-field" id="addr2" name="addr2" placeholder="상세 주소" type="text" value="어디겠지"/>
+                <input class="input-field" id="addr2" name="addr2" placeholder="상세 주소" type="text" value="어디겠지" />
             </div>
 
             <!-- 사진 -->
             <div class="input-container">
-                <input class="input-field" id="photo" name="photo" type="file"/>
+                <input class="input-field" id="photo" name="photo" type="file" />
             </div>
 
             <!-- 회원가입 버튼 -->
@@ -93,15 +104,17 @@
         </div>
     </div>
 
-    <th:block th:replace="~{_fragments/_scripts :: my-scripts}"/>
+    <th:block th:replace="~{_fragments/_scripts :: my-scripts}" />
     <!-- 다음 우편번호 검색 : https://postcode.map.daum.net/guide -->
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script>
+        /** 우편번호 검색 이벤트 */
         document.querySelector("#find-postocde").addEventListener("click", async (e) => {
             e.preventDefault();
             utilHelper.findPostCode();
         });
 
+        /** 아이디 중복 검사 이벤트 */
         document.querySelector("#id_unique_check").addEventListener("click", async (e) => {
             e.preventDefault();
 
@@ -113,21 +126,29 @@
                 return;
             }
 
-            const userId = document.querySelector("#user_id").value;
-            const data = await fetchHelper.get(`/api/account/id_unique_check`, {
-                user_id: userId
-            });
-
-            if (data) {
-                await utilHelper.alertSuccess("사용 가능한 아이디 입니다.");
-                document.querySelector("#id_check").value = "Y";
+            try {
+                // 중복 아이디 검사 --> 사용 가능 ID : 정상종료 / 사용 불가 ID : 예외 발생
+                await fetchHelper.get(`/api/account/id_unique_check`, {
+                    user_id: document.querySelector("#user_id").value
+                });
+            } catch (e) {
+                console.error(e);
+                await utilHelper.alertDanger(e.message);
+                return;
             }
+
+            await utilHelper.alertSuccess("사용 가능한 아이디 입니다.");
+            document.querySelector("#id_check").value = "Y";
         });
 
+        /** 아이디에 대한 입력값이 변경되는 경우 발생하는 이벤트 */
         document.querySelector("#user_id").addEventListener("change", e => {
+            // 아이디가 변경되면 중복검사를 다시 해야 한다.
+            // 따라서, 중복검사 여부를 N으로 변경한다.
             document.querySelector("#id_check").value = "N";
         });
 
+        /** 이메일 중복 검사 이벤트 */
         document.querySelector("#email_unique_check").addEventListener("click", async (e) => {
             e.preventDefault();
 
@@ -135,25 +156,35 @@
                 regexHelper.value("#email", "이메일을 입력하세요");
             } catch (e) {
                 await utilHelper.alertDanger(e.message);
-                e.element.focus();
+                // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
+                setTimeout(() => e.element.focus(), 1);
                 return;
             }
 
-            const email = document.querySelector("#email").value;
-            const data = await fetchHelper.get(`/api/account/email_unique_check`, {
-                email: email
-            });
-
-            if (data) {
-                await utilHelper.alertSuccess("사용 가능한 이메일 입니다.");
-                document.querySelector("#email_check").value = "Y";
+            try {
+                // 중복 이메일 검사 --> 사용 가능 이메일 : 정상종료 / 사용 불가 이메일 : 예외 발생
+                await fetchHelper.get(`/api/account/email_unique_check`, {
+                    email: document.querySelector("#email").value
+                });
+            } catch (e) {
+                await utilHelper.alertDanger(e.message);
+                // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
+                setTimeout(() => e.element.focus(), 1);
+                return;
             }
+
+            await utilHelper.alertSuccess("사용 가능한 이메일 입니다.");
+            document.querySelector("#email_check").value = "Y";
         });
 
+        /** 이메일에 대한 입력값이 변경되는 경우 발생하는 이벤트 */
         document.querySelector("#email").addEventListener("change", e => {
+            // 이메일이 변경되면 중복검사를 다시 해야 한다.
+            // 따라서, 중복검사 여부를 N으로 변경한다.
             document.querySelector("#email_check").value = "N";
         });
 
+        /** 회원가입 폼 제출 이벤트 */
         document.getElementById("signup-form").addEventListener("submit", async (e) => {
             e.preventDefault();
 
@@ -194,25 +225,29 @@
             } catch (e) {
                 await utilHelper.alertDanger(e.message);
 
+                // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
                 setTimeout(() => e.element.focus(), 1);
                 return;
             }
 
+            // 아이디와 이메일 중복검사 여부 확인
             const idCheck = document.querySelector("#id_check").value;
             const emailCheck = document.querySelector("#email_check").value;
 
-            // if (idCheck === "N") {
-            //     utilHelper.alertWarning("아이디 중복 검사를 진행해주세요.");
-            //     return;
-            // }
-            //
-            // if (emailCheck === "N") {
-            //     utilHelper.alertWarning("이메일 중복 검사를 진행해주세요.");
-            //     return;
-            // }
+            if (idCheck === "N") {
+                utilHelper.alertWarning("아이디 중복 검사를 진행해주세요.");
+                return;
+            }
 
+            if (emailCheck === "N") {
+                utilHelper.alertWarning("이메일 중복 검사를 진행해주세요.");
+                return;
+            }
+
+            // <form>태그 내의 모든 요소를 Ajax 요청이 가능한 상태로 변환
             const formData = new FormData(e.currentTarget);
 
+            // Ajax 요청 --> 백엔드에 가입 요청함
             try {
                 data = await fetchHelper.post("[[@{/api/account/join}]]", formData);
             } catch (e) {
@@ -221,25 +256,10 @@
                 return;
             }
 
-            console.log(data);
-
-            // fetch(`/api/account/join`, {
-            //     method: "POST",
-            //     body: formData
-            // }).then(response => {
-            //     if (!response.ok) {
-            //         throw new Error("회원가입에 실패했습니다.");
-            //     }
-            //     console.log(response.json());
-            // }).catch(error => {
-            //     console.error(error);
-            //     utilHelper.alertDanger(error.message);
-            // });
-
-            // if (data) {
-            //     window.location = "[[@{/account/join_result}]]";
-            // }
+            // 회원가입 성공 후 결과 페이지로 이동
+            window.location = "[[@{/account/join_result}]]";
         });
     </script>
 </body>
+
 </html>

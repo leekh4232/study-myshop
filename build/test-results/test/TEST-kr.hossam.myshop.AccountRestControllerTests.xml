@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="kr.hossam.myshop.AccountRestControllerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-07-02T15:37:56.339Z" hostname="igwanghoui-MacStudio.local" time="0.527">
+<testsuite name="kr.hossam.myshop.AccountRestControllerTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-07-03T02:25:33.204Z" hostname="DESKTOP-2F0TLNC" time="1.159">
   <properties/>
-  <testcase name="emailUniqueCheck()" classname="kr.hossam.myshop.AccountRestControllerTests" time="0.527"/>
-  <system-out><![CDATA[00:37:55.100 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [kr.hossam.myshop.AccountRestControllerTests]: AccountRestControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-00:37:55.140 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration kr.hossam.myshop.MyschopApplication for test class kr.hossam.myshop.AccountRestControllerTests
+  <testcase name="join()" classname="kr.hossam.myshop.AccountRestControllerTests" time="1.159"/>
+  <system-out><![CDATA[11:25:30.177 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [kr.hossam.myshop.AccountRestControllerTests]: AccountRestControllerTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+11:25:30.279 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration kr.hossam.myshop.MyschopApplication for test class kr.hossam.myshop.AccountRestControllerTests
 
   .   ____          _            __ _ _
  /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
@@ -14,29 +14,78 @@
 
  :: Spring Boot ::                (v3.3.5)
 
-[INFO ] 25-07-03 00:37:55 [AccountRestControllerTests:50] - Starting AccountRestControllerTests using Java 21.0.7 with PID 61764 (started by leekh in /Users/leekh/study-myshop)
-[DEBUG] 25-07-03 00:37:55 [AccountRestControllerTests:51] - Running with Spring Boot v3.3.5, Spring v6.1.14
-[INFO ] 25-07-03 00:37:55 [AccountRestControllerTests:654] - No active profile set, falling back to 1 default profile: "default"
-[INFO ] 25-07-03 00:37:56 [AccountRestControllerTests:56] - Started AccountRestControllerTests in 1.115 seconds (process running for 1.532)
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:49] - ---------- new client connect ------------
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:69] - [Client] 127.0.0.1, Mac, Mac OS X 10.15, Chrome 126.0
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:87] - [GET] http://localhost/api/account/email_unique_check
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:94] - (param) <-- email = testuser@gmail.com
-[DEBUG] 25-07-03 00:37:56 [selectCount:135] - ==>  Preparing: SELECT COUNT(*) FROM members WHERE email = ?
-[DEBUG] 25-07-03 00:37:56 [selectCount:135] - ==> Parameters: testuser@gmail.com(String)
-[INFO ] 25-07-03 00:37:56 [sqlonly:228] - SELECT COUNT(*) FROM members WHERE email = 'testuser@gmail.com'
+[INFO ] 25-07-03 11:25:30 [AccountRestControllerTests:50] - Starting AccountRestControllerTests using Java 21.0.2 with PID 22536 (started by leekh in E:\study-myshop)
+[DEBUG] 25-07-03 11:25:30 [AccountRestControllerTests:51] - Running with Spring Boot v3.3.5, Spring v6.1.14
+[INFO ] 25-07-03 11:25:30 [AccountRestControllerTests:654] - No active profile set, falling back to 1 default profile: "default"
+[INFO ] 25-07-03 11:25:33 [AccountRestControllerTests:56] - Started AccountRestControllerTests in 2.732 seconds (process running for 3.683)
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:49] - ---------- new client connect ------------
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:69] - [Client] 127.0.0.1, Mac, Mac OS X 10.15, Chrome 126.0
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:87] - [POST] http://localhost/api/account/join
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- user_id = hellotest1
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- user_pw = 1234
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- user_pw_re = 1234
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- user_name = 헬로테스트
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- email = hellotest1@naver.com
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- phone = 01012345678
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- birthday = 2025-07-03
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- gender = M
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- postcode = 12345
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- addr1 = 서울시 어딘가
+[INFO ] 25-07-03 11:25:33 [MyInterceptor:94] - (param) <-- addr2 = 어디이겠지
+[DEBUG] 25-07-03 11:25:34 [FileHelper:286] - [Thumbnail] path: /2025/07/03/17515095340070.jpg, size: 640x640, crop: true
+[DEBUG] 25-07-03 11:25:34 [FileHelper:305] - [Thumbnail] saveFile: C:\Users\leekh\spring-upload\2025\07\03\17515095340070_640x640.jpg
+[DEBUG] 25-07-03 11:25:34 [FileHelper:269] - UploadItem(fieldName=photo, originName=1376395131.jpg, contentType=image/jpeg, fileSize=244596, filePath=/2025/07/03/17515095340070.jpg, fileUrl=/files/2025/07/03/17515095340070.jpg, thumbnailPath=/2025/07/03/17515095340070_640x640.jpg, thumbnailUrl=/files/2025/07/03/17515095340070_640x640.jpg)
+[DEBUG] 25-07-03 11:25:34 [selectCount:135] - ==>  Preparing: SELECT COUNT(*) FROM members WHERE user_id = ?
+[DEBUG] 25-07-03 11:25:34 [selectCount:135] - ==> Parameters: hellotest1(String)
+[INFO ] 25-07-03 11:25:34 [sqlonly:228] - SELECT COUNT(*) FROM members WHERE user_id = 'hellotest1'
 
-[INFO ] 25-07-03 00:37:56 [resultsettable:610] - 
+[INFO ] 25-07-03 11:25:34 [resultsettable:610] - 
 |---------|
 |count(*) |
 |---------|
 |0        |
 |---------|
 
-[DEBUG] 25-07-03 00:37:56 [selectCount:135] - <==      Total: 1
-[INFO ] 25-07-03 00:37:56 [MyInterceptor:124] - running time: 135(ms)
-[DEBUG] 25-07-03 00:37:56 [AccountRestControllerTests:85] - 응답 상태코드: 200
-[DEBUG] 25-07-03 00:37:56 [AccountRestControllerTests:86] - 응답 JSON 전문: {"status":200,"message":"OK","timestamp":"2025-07-03T00:37:56.846638"}
+[DEBUG] 25-07-03 11:25:34 [selectCount:135] - <==      Total: 1
+[DEBUG] 25-07-03 11:25:34 [selectCount:135] - ==>  Preparing: SELECT COUNT(*) FROM members WHERE email = ?
+[DEBUG] 25-07-03 11:25:34 [selectCount:135] - ==> Parameters: hellotest1@naver.com(String)
+[INFO ] 25-07-03 11:25:34 [sqlonly:228] - SELECT COUNT(*) FROM members WHERE email = 'hellotest1@naver.com'
+
+[INFO ] 25-07-03 11:25:34 [resultsettable:610] - 
+|---------|
+|count(*) |
+|---------|
+|0        |
+|---------|
+
+[DEBUG] 25-07-03 11:25:34 [selectCount:135] - <==      Total: 1
+[DEBUG] 25-07-03 11:25:34 [insert:135] - ==>  Preparing: INSERT INTO members (user_id, user_pw, user_name, email, phone, birthday, gender, postcode, addr1, addr2,photo, is_out, is_admin, login_date, reg_date, edit_date) VALUES (?, MD5(?), ?, ?, ?, ?, ?, ?,?, ?, ?, 'N', 'N', NULL, NOW(), NOW())
+[DEBUG] 25-07-03 11:25:34 [insert:135] - ==> Parameters: hellotest1(String), 1234(String), 헬로테스트(String), hellotest1@naver.com(String), 01012345678(String), 2025-07-03(String), M(String), 12345(String), 서울시 어딘가(String), 어디이겠지(String), /2025/07/03/17515095340070.jpg(String)
+[INFO ] 25-07-03 11:25:34 [sqlonly:228] - INSERT INTO members (user_id, user_pw, user_name, email, phone, birthday, gender, postcode, addr1, addr2,photo, is_out, is_admin, login_date, reg_date, edit_date) VALUES ('hellotest1', MD5('1234'), '헬로테스트', 'hellotest1@naver.com', '01012345678', '2025-07-03', 'M', '12345','서울시 어딘가', '어디이겠지', '/2025/07/03/17515095340070.jpg', 'N', 'N', NULL, NOW(), NOW())
+
+[DEBUG] 25-07-03 11:25:34 [insert:135] - <==    Updates: 1
+[INFO ] 25-07-03 11:25:34 [resultsettable:610] - 
+|----------|
+|insert_id |
+|----------|
+|15        |
+|----------|
+
+[DEBUG] 25-07-03 11:25:34 [selectItem:135] - ==>  Preparing: SELECT id, user_id, user_pw, user_name, email, phone, birthday, gender, postcode, addr1, addr2, photo, is_out, is_admin, login_date, reg_date, edit_date FROM members WHERE id = ?
+[DEBUG] 25-07-03 11:25:34 [selectItem:135] - ==> Parameters: 15(Integer)
+[INFO ] 25-07-03 11:25:34 [sqlonly:228] - SELECT id, user_id, user_pw, user_name, email, phone, birthday, gender, postcode, addr1, addr2, photo, is_out, is_admin, login_date, reg_date, edit_date FROM members WHERE id = 15
+
+[INFO ] 25-07-03 11:25:34 [resultsettable:610] - 
+|---|-----------|---------------------------------|----------|---------------------|------------|-----------|-------|---------|--------|------|-------------------------------|-------|---------|-----------|--------------------|--------------------|
+|id |user_id    |user_pw                          |user_name |email                |phone       |birthday   |gender |postcode |addr1   |addr2 |photo                          |is_out |is_admin |login_date |reg_date            |edit_date           |
+|---|-----------|---------------------------------|----------|---------------------|------------|-----------|-------|---------|--------|------|-------------------------------|-------|---------|-----------|--------------------|--------------------|
+|15 |hellotest1 |81dc9bdb52d04dc20036dbd8313ed055 |헬로테스트     |hellotest1@naver.com |01012345678 |2025-07-03 |M      |12345    |서울시 어딘가 |어디이겠지 |/2025/07/03/17515095340070.jpg |N      |N        |null       |2025-07-03 11:25:34 |2025-07-03 11:25:34 |
+|---|-----------|---------------------------------|----------|---------------------|------------|-----------|-------|---------|--------|------|-------------------------------|-------|---------|-----------|--------------------|--------------------|
+
+[DEBUG] 25-07-03 11:25:34 [selectItem:135] - <==      Total: 1
+[INFO ] 25-07-03 11:25:34 [MyInterceptor:124] - running time: 506(ms)
+[DEBUG] 25-07-03 11:25:34 [AccountRestControllerTests:159] - 응답 상태코드: 200
+[DEBUG] 25-07-03 11:25:34 [AccountRestControllerTests:160] - 응답 JSON 전문: {"status":200,"message":"OK","timestamp":"2025-07-03T11:25:34.324437"}
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

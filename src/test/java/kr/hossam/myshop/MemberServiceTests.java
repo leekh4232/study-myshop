@@ -72,4 +72,58 @@ class MemberServiceTests {
 
         log.debug("가입된 회원 정보: {}", output);
     }
+
+    @Test
+    void testLogin() {
+        // 테스트용 로그인 정보 생성
+        Member input = new Member();
+        input.setUserId("helloworld");
+        input.setUserPw("1234");
+
+        Member output = null;
+        try {
+            output = memberService.login(input);
+        } catch (Exception e) {
+            log.error("로그인에 실패했습니다.", e);
+            return;
+        }
+
+        log.debug("로그인 성공, 회원 정보: {}", output);
+    }
+
+    @Test
+    void testFindId() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setUserName("테스트유저1");
+        input.setEmail("leekh4232@gmail.com");
+
+        Member output = null;
+        try {
+            output = memberService.findId(input);
+        } catch (Exception e) {
+            log.error("아이디 찾기에 실패했습니다.", e);
+            return;
+        }
+
+        log.debug("찾은 아이디: {}", output.getUserId());
+    }
+
+    @Test
+    void testResetPw() {
+        // 테스트용 비밀번호 재설정 정보 생성
+        Member input = new Member();
+        input.setUserId("testuser1");
+        input.setEmail("leekh4232@gmail.com");
+        input.setUserPw("1234");
+
+        try {
+            memberService.resetPw(input);
+        } catch (Exception e) {
+            log.error("비밀번호 재설정에 실패했습니다.", e);
+            return;
+        }
+
+        log.debug("비밀번호가 성공적으로 재설정되었습니다.");
+    }
 }
