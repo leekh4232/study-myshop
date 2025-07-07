@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -299,6 +300,33 @@ public class AccountRestController {
         /** 3) 메일 발송 */
         String subject = userId + "님의 비밀번호가 재설정 되었습니다.";
         mailHelper.sendMail(email, subject, template);
+
+        return restHelper.sendJson();
+    }
+
+    /**
+     * 회원 탈퇴 처리
+     * @param request       HTTP 요청 객체
+     * @param memberInfo    현재 로그인 중인 회원 정보 (세션에서 가져옴)
+     * @param password      탈퇴할 때 사용할 비밀번호
+     * @return              탈퇴 결과에 대한 JSON 응답
+     * @throws Exception    탈퇴 처리 중 예외 발생 시
+     */
+    @DeleteMapping("/api/account/out")
+    public Map<String, Object> out(
+        HttpServletRequest request,
+        @SessionAttribute("memberInfo") Member memberInfo,
+        @RequestParam("password") String password) throws Exception {
+
+        // 세션으로부터 추출한 Member객체에 입력받은 비밀번호를 넣어준다.
+        memberInfo.setUserPw(password);
+
+        // 탈퇴 수행
+        memberService.out(memberInfo);
+
+        // 로그아웃을 위해 세션을 삭제한다.
+        HttpSession session = request.getSession();
+        session.invalidate();
 
         return restHelper.sendJson();
     }
