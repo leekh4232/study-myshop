@@ -102,4 +102,16 @@ public class MemberMapperTests {
         int output = memberMapper.resetPw(input);
         log.debug("output:{}", output);
     }
+
+    @Test
+    void out() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(5);             // 존재하는 회원의 ID로 설정
+        input.setUserPw("1234");    // 탈퇴할 회원의 비밀번호
+
+        // out 실행
+        int output = memberMapper.out(input);
+        log.debug("output:{}", output);
+    }
 }
