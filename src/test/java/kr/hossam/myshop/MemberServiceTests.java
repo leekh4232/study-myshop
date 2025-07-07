@@ -6,10 +6,12 @@ import kr.hossam.myshop.services.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Slf4j
 @SpringBootTest
+@AutoConfigureMockMvc
 class MemberServiceTests {
 
     @Autowired
@@ -133,5 +135,22 @@ class MemberServiceTests {
         }
 
         log.debug("비밀번호가 성공적으로 재설정되었습니다.");
+    }
+
+    @Test
+    void testOutMember() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(5);             // 존재하는 회원의 ID로 설정
+        input.setUserPw("1234");    // 탈퇴할 때 사용할 비밀번호
+
+        try {
+            memberService.out(input);
+        } catch (Exception e) {
+            log.error("회원 탈퇴에 실패했습니다.", e);
+            return;
+        }
+
+        log.debug("회원 탈퇴가 성공적으로 처리되었습니다.");
     }
 }

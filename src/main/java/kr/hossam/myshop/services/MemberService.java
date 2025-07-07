@@ -59,4 +59,14 @@ public interface MemberService {
      * @throws Exception
      */
     public void resetPw(Member input) throws Exception;
+
+    /**
+     * 회원 탈퇴를 처리한다.
+     * 입력된 비밀번호가 일치하는 경우에만 탈퇴 처리를 수행하며,
+     * is_out 값을 'Y'로 변경하고 edit_date를 현재 시간으로 설정한다.
+     *
+     * @param input - 회원 정보 (회원 ID, 비밀번호)
+     * @throws Exception - 예외 발생 시
+     */
+    public void out(Member input) throws Exception;
 }

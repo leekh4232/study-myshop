@@ -5,10 +5,12 @@ import kr.hossam.myshop.models.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Slf4j
 @SpringBootTest
+@AutoConfigureMockMvc
 public class MemberMapperTests {
 
     @Autowired
@@ -104,6 +106,7 @@ public class MemberMapperTests {
     }
 
     @Test
+<<<<<<< HEAD
     void out() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
@@ -111,6 +114,15 @@ public class MemberMapperTests {
         input.setUserPw("1234");    // 탈퇴할 회원의 비밀번호
 
         // out 실행
+=======
+    void outMember() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(5);             // 존재하는 회원의 ID로 설정
+        input.setUserPw("1234");    // 탈퇴할 때 사용할 비밀번호
+
+        // outMember 실행
+>>>>>>> 18a7365c3d91793ca0c77b1295e1dee361445f71
         int output = memberMapper.out(input);
         log.debug("output:{}", output);
     }

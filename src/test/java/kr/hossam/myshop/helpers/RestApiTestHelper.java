@@ -29,7 +29,6 @@ public class RestApiTestHelper {
      * @param method 요청 방식 (GET, POST, PUT, DELETE)
      * @param url 요청 URL
      * @param params 파라미터 맵
-     * @param doPrint 결과 출력 여부
      * @throws Exception
      */
     public void test(String method, String url, Map<String, Object> params, MockMultipartFile file)

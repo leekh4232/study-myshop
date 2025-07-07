@@ -86,7 +86,7 @@ public class AccountRestControllerTests {
     @Test
     void findId() throws Exception {
         Map<String, Object> params = new HashMap<>();
-        params.put("user_name", "헬로테스트");
+        params.put("user_name", "테스트유저1");
         params.put("email", "leekh4232@gmail.com");
 
         restApiTestHelper.test("POST", "/api/account/find_id", params, null);

@@ -49,16 +49,6 @@ public class AccountController {
     }
 
     /**
-     * 회원 탈퇴 페이지
-     *
-     * @return 회원 탈퇴 페이지의 뷰 이름
-     */
-    @GetMapping("/account/out")
-    public String out() {
-        return "account/out";
-    }
-
-    /**
      * 아이디 찾기 페이지
      *
      * @return 아이디 찾기 페이지의 뷰 이름
@@ -76,5 +66,15 @@ public class AccountController {
     @GetMapping("/account/reset_pw")
     public String resetPw() {
         return "account/reset_pw";
+    }
+
+    /**
+     * 회원 탈퇴 페이지
+     *
+     * @return 회원 탈퇴 페이지의 뷰 이름
+     */
+    @GetMapping("/account/out")
+    public String out() {
+        return "account/out";
     }
 }

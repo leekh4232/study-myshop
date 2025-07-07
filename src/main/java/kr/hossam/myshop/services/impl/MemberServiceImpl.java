@@ -30,7 +30,6 @@ public class MemberServiceImpl implements MemberService {
         }
     }
 
-
     @Override
     public Member join(Member input) throws Exception {
         // 가입 과정에서 아이디와 이메일 중복 검사를 수행
@@ -82,6 +81,14 @@ public class MemberServiceImpl implements MemberService {
     public void resetPw(Member input) throws Exception {
         if (memberMapper.resetPw(input) == 0) {
             throw new Exception("아이디와 이메일을 확인하세요.");
+        }
+    }
+
+    @Override
+    public void out(Member input) throws Exception {
+        // 탈퇴 처리 결과 확인
+        if (memberMapper.out(input) == 0) {
+            throw new ServiceNoResultException("회원 탈퇴에 실패했습니다. 비밀번호가 잘못되었거나 가입되어 있지 않은 회원 입니다.");
         }
     }
 }
