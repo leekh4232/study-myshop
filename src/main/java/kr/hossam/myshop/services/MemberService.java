@@ -1,5 +1,6 @@
 package kr.hossam.myshop.services;
 
+import java.util.List;
 import kr.hossam.myshop.models.Member;
 
 public interface MemberService {
@@ -69,4 +70,14 @@ public interface MemberService {
      * @throws Exception - 예외 발생 시
      */
     public void out(Member input) throws Exception;
+
+    /**
+     * 탈퇴한 회원들의 정보를 조회한다.
+     * is_out 값이 'Y'인 회원들 중에서 탈퇴일시가 현재 시각을 기준으로 1분 이전인 회원들의 정보를 조회한다.
+     * 실제 서비스 개발시에는 3개월에 해당하는 시간을 설정하는 등 사이트 정책에 따라 달라져야 한다.
+     *
+     * @return List<Member> - 탈퇴한 회원들의 정보 리스트
+     * @throws Exception - 예외 발생 시
+     */
+    public List<Member> processOutMembers() throws Exception;
 }
