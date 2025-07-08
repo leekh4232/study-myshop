@@ -17,7 +17,7 @@ import lombok.extern.slf4j.Slf4j;
  * 스케쥴러 샘플 클래스
  * 각 메서드가 정해진 스케쥴에 따라 자동 실행된다.
  *
- * "프로그램명Application.java" 파일의 상단에 "@EnableScheduling"이 추가되어야 한다.
+ * 메인클래스 "프로그램명Application.java" 파일의 상단에 "@EnableScheduling"이 추가되어야 한다.
  */
 @Slf4j
 @Component

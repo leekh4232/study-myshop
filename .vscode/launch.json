@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-MyschopApplication<study-myshop>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "kr.hossam.myshop.MyschopApplication",
+            "projectName": "study-myshop",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
