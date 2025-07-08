@@ -115,4 +115,28 @@ public class MemberMapperTests {
         int output = memberMapper.out(input);
         log.debug("output:{}", output);
     }
+
+    @Test
+    void editMember() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(1); // 존재하는 회원의 ID로 설정
+        input.setUserName("수정된유저");
+        input.setEmail("leekh4232@yonsei.ac.kr");
+        input.setPhone("01098765432");
+        input.setBirthday("1990-01-01");
+        input.setGender("M");
+        input.setPostcode("12345");
+        input.setAddr1("서울시 강남구");
+        input.setAddr2("테스트동 101호");
+        input.setPhoto(null);
+
+        // 현재 비밀번호
+        input.setUserPw("1234"); // 현재 비밀번호를 입력해야 수정 가능
+        input.setNewUserPw("newpassword123"); // 새 비밀번호 설정 (선택 사항)
+
+        // editMember 실행
+        int output = memberMapper.update(input);
+        log.debug("output:{}", output);
+    }
 }

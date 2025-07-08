@@ -170,26 +170,4 @@ public interface MemberMapper {
             + "WHERE id = #{id} AND user_pw = MD5(#{userPw})"
             + "</script>")
     public int update(Member input);
-
-    /**
-     * 회원 정보를 삭제한다.
-     * 회원 탈퇴시 is_out 값을 'Y'로 변경하고, edit_date를 현재 시간으로 설정한다.
-     *
-     * @param input - 회원 정보
-     * @return int - 삭제된 행의 수
-     */
-    @Delete("DELETE FROM members WHERE id = #{id}")
-    public int delete(Member input);
-
-    /**
-     * 전체 회원 목록을 조회한다.
-     *
-     * @param input - 회원 정보
-     * @return List<Member> - 조회된 회원 목록
-     */
-    @Select("SELECT "
-            + "id, user_id, user_pw, user_name, email, phone, birthday, gender, "
-            + "postcode, addr1, addr2, photo, is_out, is_admin, login_date, reg_date, edit_date "
-            + "FROM members")
-    public List<Member> selectList(Member input);
 }

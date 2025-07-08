@@ -80,4 +80,14 @@ public interface MemberService {
      * @throws Exception - 예외 발생 시
      */
     public List<Member> processOutMembers() throws Exception;
+
+    /**
+     * 회원 정보를 업데이트한다.
+     * 입력된 회원 정보를 바탕으로 회원 정보를 수정하고, 수정된 회원 정보를 반환한다.
+     *
+     * @param input - 회원 정보
+     * @return Member - 수정된 회원 정보
+     * @throws Exception - 예외 발생 시
+     */
+    public Member update(Member input) throws Exception;
 }

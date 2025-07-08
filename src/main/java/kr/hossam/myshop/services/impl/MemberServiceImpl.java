@@ -97,16 +97,22 @@ public class MemberServiceImpl implements MemberService {
     public List<Member> processOutMembers() throws Exception {
         List<Member> output = null;
 
-        try {
-            // 1) is_out이 Y인 상태로 특정 시간이 지난 데이터를 조회한다.
-            output = memberMapper.selectOutMembersPhoto();
+        // 1) is_out이 Y인 상태로 특정 시간이 지난 데이터를 조회한다.
+        output = memberMapper.selectOutMembersPhoto();
 
-            // 2) 탈퇴 요청된 데이터를 삭제한다.
-            memberMapper.deleteOutMembers();
-        } catch (Exception e) {
-            throw new Exception("탈퇴 처리에 실패했습니다.");
-        }
+        // 2) 탈퇴 요청된 데이터를 삭제한다.
+        memberMapper.deleteOutMembers();
 
         return output;
+    }
+
+    @Override
+    public Member update(Member input) throws Exception {
+        // WHERE절 조건에 맞는 데이터가 없는 경우 --> 비밀번호 잘못됨
+        if (memberMapper.update(input) == 0) {
+            throw new Exception("현재 비밀번호를 확인하세요.");
+        }
+
+        return memberMapper.selectItem(input);
     }
 }

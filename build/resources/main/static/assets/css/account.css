@@ -5,11 +5,11 @@
     --background-color: #f4f6f9;
     --container-bg-color: #fff;
     --box-shadow-color: rgba(0, 0, 0, 0.1);
-    --primary-color: #4CAF50;
+    --primary-color: #4caf50;
     --primary-color-hover: #45a049;
     --border-color: #ccc;
     --text-color: #333;
-    --link-color: #4CAF50;
+    --link-color: #4caf50;
 
     /* 크기 및 패딩 변수 */
     --container-padding: 40px;
@@ -31,7 +31,7 @@
 
 /* 기본 설정 */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: "Arial", sans-serif;
     background-color: var(--background-color);
     margin: 0;
     padding: 0;
@@ -172,6 +172,49 @@ body {
                 .gender-input:checked + .gender-custom {
                     border-color: var(--primary-color);
                     background-color: var(--primary-color);
+                }
+            }
+        }
+    }
+
+    /** 회원정보 수정시 추가 */
+    &.edit {
+        input[disabled] {
+            cursor: not-allowed;
+        }
+
+        .info {
+            flex-direction: column;
+
+            input {
+                flex-basis: 100%;
+            }
+
+            p {
+                font-size: 12px;
+                margin-top: 5px;
+                color: #f22;
+                padding-left: 5px;
+                font-style: italic;
+            }
+
+            .img-container {
+                display: flex;
+                align-items: center;
+
+                img {
+                    display: block;
+                    object-fit: cover;
+                    margin: 10px;
+                    border-radius: 50%;
+                    width: 100px;
+                }
+
+                label {
+                    display: block;
+                    font-size: 12px;
+                    margin: 5px 0;
+                    align-items: center;
                 }
             }
         }

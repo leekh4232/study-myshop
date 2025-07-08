@@ -77,4 +77,14 @@ public class AccountController {
     public String out() {
         return "account/out";
     }
+
+    /**
+     * 회원 정보 수정 페이지
+     *
+     * @return 회원 정보 수정 페이지의 뷰 이름
+     */
+    @GetMapping("/account/edit")
+    public String edit() {
+        return "account/edit";
+    }
 }
