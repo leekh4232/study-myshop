@@ -1,0 +1,40 @@
+@startuml
+skinparam dpi 200
+title AccountRestController - findId 메서드
+
+actor User
+participant "AccountRestController" as Controller
+participant "RegexHelper" as Helper
+participant "MemberService" as Service
+participant "MemberMapper" as Mapper
+database "Database" as DB
+
+User -> Controller: findId(userName: String, email: String)
+activate Controller
+
+Controller -> Helper: 유효성 검사
+activate Helper
+Helper --> Controller: validation result
+deactivate Helper
+
+Controller -> Controller: create Member input
+Controller -> Service: findId(input: Member)
+activate Service
+
+Service -> Mapper: selectItem(input: Member)
+activate Mapper
+Mapper -> DB: SELECT
+activate DB
+DB --> Mapper: Member data
+deactivate DB
+Mapper --> Service: Member
+deactivate Mapper
+
+Service --> Controller: Member output
+deactivate Service
+
+Controller -> Controller: restHelper.sendJson(data)
+Controller --> User: Map<String, Object>
+deactivate Controller
+
+@enduml

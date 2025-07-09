@@ -1,7 +1,6 @@
 package kr.hossam.myshop.models;
 
 import java.io.Serializable;
-
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;

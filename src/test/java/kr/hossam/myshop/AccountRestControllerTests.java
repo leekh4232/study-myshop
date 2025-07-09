@@ -5,8 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import kr.hossam.myshop.helpers.RestApiTestHelper;
+import org.springdoc.core.configuration.SpringDocConfiguration;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.HashMap;
@@ -18,6 +21,12 @@ import java.util.Map;
 public class AccountRestControllerTests {
     @Autowired
     private RestApiTestHelper restApiTestHelper;
+
+    @MockBean
+    private SwaggerConfig swaggerConfig;
+
+    @MockBean
+    private SpringDocConfiguration springDocConfiguration;
 
     /** 아이디 중복 체크 API 테스트 */
     @Test
