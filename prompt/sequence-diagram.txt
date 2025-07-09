@@ -1,0 +1,25 @@
+kr.hossam.myshop.controllers 패키지와 그 하위 패키지에 포함된 모든 클래스가 갖는 모든 메서드의 대한 시퀀스 다이어그램을 PlantUML 로 만들어야 합니다.
+
+다음에 유의해서 각각의 시퀀스 다이어그램을 생성해 주세요.
+
+1. kr.hossam.myshop 패키지 내의 클래스만 대상으로 할 것
+    - 어노테이션에 대한 명시는 필요 없음
+2. Actor > Controller > Service > Mapper > Helper > Database 순으로 나열할 것.
+    - Actor는 사용자를 의미함
+    - Controller는 kr.hossam.myshop.controllers 패키지에 존재
+    - Service는 kr.hossam.myshop.services 패키지에 존재
+    - Helper는 kr.hossam.myshop.helpers 패키지에 존재
+    - 테이블 스키마는 /src/sql 디렉토리에 저장되어 있음
+3. "또는"과 같은 표현으로 한 번에 두 개 이상의 메서드를 표시해서는 안됨
+4. Database에 호출시에는 사용된 SQL문의 유형을 텍스트로 표시할 것
+    - SELECT, INSERT, UPDATE, DELETE 중 하나 (SQL전문이 아닌 하나의 단어로만 표기)
+5. 파라미터를 표시할 때는 데이터 타입도 함께 명시할 것
+    - 하지만 파라미터가 3개를 초과할 경우에는 파라미터 명시를 생략해야 함
+6. 리턴이 있는 경우 표기할 것
+7. RegexHelper에 대한 호출은 하나로 묶어서 처리하고 "유효성 검사"라고만 표기할 것
+8. 결과 코드는 PlantUML 형식일 것
+9. dpi를 200으로 설정할 것 --> "skinparam dpi 200" 구문 사용
+
+위 내용에 따라 작성된 다이어그램을 프로젝트 내에 "uml/클래스이름" 디렉토리를 만들고, "메서드이름_Sequence.puml" 파일로 저장하세요.
+- 디렉토리가 이미 존재한다면 존재하는 디렉토리를 사용하세요.
+- 동일한 이름의 파일이 이미 있다면 기존 파일을 덮어 쓰세요.

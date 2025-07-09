@@ -1,0 +1,119 @@
+@startuml
+!dpi 200
+title AccountRestController Class Diagram
+
+class AccountRestController {
+    - memberService : MemberService
+    - restHelper : RestHelper
+    - regexHelper : RegexHelper
+    - fileHelper : FileHelper
+    - utilHelper : UtilHelper
+    - mailHelper : MailHelper
+    + AccountRestController(memberService: MemberService, restHelper: RestHelper, regexHelper: RegexHelper, fileHelper: FileHelper, utilHelper: UtilHelper, mailHelper: MailHelper)
+    + idUniqueCheck(userId: String, memberInfo: Member) : Map<String, Object>
+    + EmailUniqueCheck(email: String, memberInfo: Member) : Map<String, Object>
+    + join(userId: String, userPw: String, userPwRe: String, userName: String, email: String, phone: String, birthday: String, gender: String, postcode: String, addr1: String, addr2: String, photo: MultipartFile) : Map<String, Object>
+    + login(request: HttpServletRequest, userId: String, userPw: String) : Map<String, Object>
+    + findId(userName: String, email: String) : Map<String, Object>
+    + resetPw(userId: String, email: String) : Map<String, Object>
+    + out(request: HttpServletRequest, memberInfo: Member, password: String) : Map<String, Object>
+    + edit(request: HttpServletRequest, memberInfo: Member, userPw: String, newUserPw: String, newUserPwConfirm: String, userName: String, email: String, phone: String, birthday: String, gender: String, postcode: String, addr1: String, addr2: String, deletePhoto: String, photo: MultipartFile) : Map<String, Object>
+}
+
+class MemberService {
+    <<interface>>
+    + isUniqueUserId(member: Member) : void
+    + isUniqueEmail(member: Member) : void
+    + join(member: Member) : Member
+    + login(member: Member) : Member
+    + findId(member: Member) : Member
+    + resetPw(member: Member) : void
+    + out(member: Member) : void
+    + update(member: Member) : Member
+}
+
+class RestHelper {
+    - logger : Logger
+    + RestHelper()
+    + sendJson() : Map<String, Object>
+    + sendJson(data: Map<String, Object>) : Map<String, Object>
+}
+
+class RegexHelper {
+    - logger : Logger
+    + RegexHelper()
+    + isValue(str: String, message: String) : void
+    + isNum(str: String, message: String) : void
+    + isKor(str: String, message: String) : void
+    + isEng(str: String, message: String) : void
+    + isEngNum(str: String, message: String) : void
+    + isEmail(str: String, message: String) : void
+    + isPhone(str: String, message: String) : void
+}
+
+class FileHelper {
+    - logger : Logger
+    + FileHelper()
+    + saveMultipartFile(multipartFile: MultipartFile) : UploadItem
+    + readString(filePath: String) : String
+    + deleteFile(filePath: String) : void
+}
+
+class UtilHelper {
+    + UtilHelper()
+    + getRandomString(length: int) : String
+    + randomPassword(length: int) : String
+}
+
+class MailHelper {
+    - logger : Logger
+    + MailHelper()
+    + sendMail(to: String, subject: String, content: String) : void
+}
+
+class Member {
+    - id : int
+    - userId : String
+    - userPw : String
+    - userName : String
+    - email : String
+    - phone : String
+    - birthday : String
+    - gender : String
+    - postcode : String
+    - addr1 : String
+    - addr2 : String
+    - photo : String
+    - isOut : String
+    - isAdmin : String
+    - loginDate : String
+    - regDate : String
+    - editDate : String
+    - newUserPw : String
+    + Member()
+}
+
+class UploadItem {
+    - fieldName : String
+    - originName : String
+    - contentType : String
+    - fileSize : long
+    - filePath : String
+    - fileUrl : String
+    - thumbnailPath : String
+    - thumbnailUrl : String
+    + UploadItem()
+}
+
+AccountRestController o-- MemberService : HasA
+AccountRestController o-- RestHelper : HasA
+AccountRestController o-- RegexHelper : HasA
+AccountRestController o-- FileHelper : HasA
+AccountRestController o-- UtilHelper : HasA
+AccountRestController o-- MailHelper : HasA
+
+FileHelper ..> UploadItem : creates
+AccountRestController ..> Member : uses
+MemberService ..> Member : uses
+
+@enduml

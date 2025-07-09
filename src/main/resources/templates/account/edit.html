@@ -110,7 +110,7 @@
                     <!-- 기존에 등록된 사진이 있을 경우 : 삭제 여부를 선택해야만 업로드 가능 -->
                     <input type="file" name="photo" id="photo" class="input-field" disabled />
                     <div class="img-container">
-                        <img class='user-ico' th:src="${session.memberInfo.photo}" />
+                        <img class='user-ico' th:src="${@fileHelper.getFileUrl(session.memberInfo.photo)}" />
                         <div>
                             <p th:text="${session.memberInfo.photo + '(이)가 등록되어 있습니다.'}"></p>
                             <label>
@@ -265,7 +265,7 @@
 
             // Ajax 요청 --> 백엔드에 정보 수정 요청함
             try {
-                data = await fetchHelper.post("[[@{/api/account/edit}]]", formData);
+                data = await fetchHelper.put("[[@{/api/account/edit}]]", formData);
             } catch (e) {
                 console.log(e);
                 await utilHelper.alertDanger(e.message);
