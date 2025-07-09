@@ -2,10 +2,15 @@ package kr.hossam.myshop.interceptors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import kr.hossam.myshop.helpers.RestHelper;
+import kr.hossam.myshop.helpers.SessionCheckHelper;
 import kr.hossam.myshop.helpers.WebHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import ua_parser.Client;
@@ -25,6 +30,9 @@ public class MyInterceptor implements HandlerInterceptor {
 
     /** WebHelper 객체 */
     private final WebHelper webHelper;
+
+    /** RestHelper 객체 */
+    private final RestHelper restHelper;
 
     /**
      * Controller 실행 전에 수행되는 메서드
@@ -92,6 +100,51 @@ public class MyInterceptor implements HandlerInterceptor {
         // --> 직전 종료시간과 이번 접속의 시작시간 과의 차이는 이전 페이지에 머문 시간을 의미한다.
         if (referer != null && endTime > 0) {
             log.info(String.format("- REFERER : time=%d, url=%s", startTime - endTime, referer));
+        }
+
+        // 로그인 여부에 따른 페이지 접근 제어
+        // @SessionCheckHelper 어노테이션이 붙은 메서드에 대해서만 세션 체크를 수행한다.
+        if (handler instanceof HandlerMethod handlerMethod) {
+            // 세션 검사용 어노테이션을 가져온다.
+            SessionCheckHelper annotation = handlerMethod.getMethodAnnotation(SessionCheckHelper.class);
+
+            // 어노테이션이 존재한다면 세션 체크를 수행한다.
+            if (annotation != null) {
+                // 컨트롤러 유형을 가져온다.
+                Class<?> beanType = handlerMethod.getBeanType();
+                // Restful 방식의 컨트롤러인지 검사
+                boolean isRestful = beanType.isAnnotationPresent(RestController.class);
+
+                // 세션 검사 여부를 결정하는 enable 속성을 가져온다.
+                // enable이 true인 경우 세션이 있어야 접근 가능하고,
+                // false인 경우 세션이 없어야 접근 가능하다.
+                boolean enable = annotation.enable();
+
+                // 로그인 여부를 체크한다.
+                HttpSession session = request.getSession(false);
+                boolean isLoggedIn = session != null && session.getAttribute("memberInfo") != null;
+
+                if (enable) {           // 로그인 중에만 접근 가능한 페이지 검사
+                    if (!isLoggedIn) {  // 로그인을 하지 않은 상태라면?
+                        if (isRestful) {
+                            restHelper.badRequest("로그인이 필요합니다.");
+                        } else {
+                            webHelper.badRequest("로그인이 필요합니다.");
+                        }
+
+                        return false;
+                    }
+                } else {                // 로그인하지 않은 상태에서만 접근 가능한 페이지 검사
+                    if (isLoggedIn) {   // 로그인을 한 상태라면?
+                        if (isRestful) {
+                            restHelper.badRequest("로그인중에는 접근할 수 없습니다.");
+                        } else {
+                            webHelper.badRequest("로그인 중에는 접근할 수 없습니다.");
+                        }
+                        return false;
+                    }
+                }
+            }
         }
 
         return HandlerInterceptor.super.preHandle(request, response, handler);
