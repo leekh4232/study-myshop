@@ -1,0 +1,47 @@
+@startuml
+skinparam dpi 200
+
+package kr.hossam.myshop.controllers {
+    class UserController {
+        + UserController()
+        + createUser(User): User
+        + getUserById(String): User
+    }
+
+    class ProductController {
+        + ProductController()
+        + createProduct(Product): Product
+        + getProductById(String): Product
+    }
+
+    class OrderController {
+        + OrderController()
+        + createOrder(Order): Order
+        + getOrderById(String): Order
+    }
+
+    class User {
+        + User(String, String)
+        + getId(): String
+        + getName(): String
+    }
+
+    class Product {
+        + Product(String, double)
+        + getId(): String
+        + getName(): String
+    }
+
+    class Order {
+        + Order(String, List<Product>)
+        + getId(): String
+        + getProducts(): List<Product>
+    }
+
+    UserController --|> User : IsA
+    ProductController --|> Product : IsA
+    OrderController --|> Order : IsA
+    Order --> Product : HasA
+}
+
+@enduml

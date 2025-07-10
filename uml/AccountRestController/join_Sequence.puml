@@ -1,0 +1,14 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountRestController
+participant RegexHelper
+participant MemberService
+participant RestHelper
+
+사용자 -> AccountRestController : join(String userId, String userPw, String userPwRe, String userName, String email, String phone, String birthday, String gender, String postcode, String addr1)
+AccountRestController -> RegexHelper : 유효성 검사
+AccountRestController -> MemberService : 회원가입 처리
+AccountRestController -> RestHelper : sendJson()
+AccountRestController --> 사용자 : JSON 응답
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountRestController
+participant RestHelper
+
+사용자 -> AccountRestController : logout(HttpServletRequest request)
+AccountRestController -> RestHelper : sendJson()
+AccountRestController --> 사용자 : JSON 응답
+@enduml

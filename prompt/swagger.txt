@@ -2,9 +2,10 @@
 
 다음에 유의하여 kr.hossam.myshop.controllers.apis 패키지 하위의 모든 클래스에 Swagger에 필요한 @Operation,  @Parameters,  @ApiResponses를 추가해 주세요.
 
-1. StringFormatException은 HTTP 상태코드 400에 해당합니다.
-2. 그 밖의 Exception은 HTTP 상태코드 500에 해당합니다.
-3. @SessionAttribute가 적용된 파라미터에는 `@Parameter(hidden=true)`를 추가해 주세요.
+1. 각 메서드의 설명은 메서드에 정의된 javadoc 주석을 참고하세요.
+2. StringFormatException은 HTTP 상태코드 400에 해당합니다.
+3. 그 밖의 Exception은 HTTP 상태코드 500에 해당합니다.
+4. @SessionAttribute가 적용된 파라미터에는 `@Parameter(hidden=true)`를 추가해 주세요.
 
 * 참고사항:
     AccountRestController.idUniqueCheck 메서드에 참고할 수 있는 샘플이 구성되어 있습니다.

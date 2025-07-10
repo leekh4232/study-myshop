@@ -1,0 +1,30 @@
+@startuml
+skinparam dpi 200
+
+package kr.hossam.myshop.controllers {
+    class ControllerA {
+        +ControllerA(param1: Type1)
+        +method1(param2: Type2): ReturnType
+    }
+
+    class ControllerB {
+        +ControllerB(param1: Type1)
+        +method2(param2: Type2): ReturnType
+    }
+
+    class ServiceA {
+        +ServiceA(param1: Type1)
+        +serviceMethod(param2: Type2): ReturnType
+    }
+
+    class RepositoryA {
+        +RepositoryA(param1: Type1)
+        +repositoryMethod(param2: Type2): ReturnType
+    }
+
+    ControllerA --|> ControllerB : IsA
+    ControllerA --> ServiceA : HasA
+    ServiceA --> RepositoryA : HasA
+}
+
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountRestController
+participant RegexHelper
+participant MemberService
+participant RestHelper
+
+사용자 -> AccountRestController : EmailUniqueCheck(String email, Member memberInfo)
+AccountRestController -> RegexHelper : 유효성 검사
+AccountRestController -> MemberService : isUniqueEmail(Member input)
+AccountRestController -> RestHelper : sendJson()
+AccountRestController --> 사용자 : JSON 응답
+@enduml

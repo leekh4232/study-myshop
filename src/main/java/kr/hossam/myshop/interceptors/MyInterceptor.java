@@ -121,7 +121,7 @@ public class MyInterceptor implements HandlerInterceptor {
                 boolean enable = annotation.enable();
 
                 // 로그인 여부를 체크한다.
-                HttpSession session = request.getSession(false);
+                HttpSession session = request.getSession();
                 boolean isLoggedIn = session != null && session.getAttribute("memberInfo") != null;
 
                 if (enable) {           // 로그인 중에만 접근 가능한 페이지 검사
@@ -130,6 +130,7 @@ public class MyInterceptor implements HandlerInterceptor {
                             restHelper.badRequest("로그인이 필요합니다.");
                         } else {
                             webHelper.badRequest("로그인이 필요합니다.");
+                            //webHelper.redirect(403, "/account/login", "로그인이 필요합니다.");
                         }
 
                         return false;

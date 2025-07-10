@@ -1,0 +1,8 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountController
+
+사용자 -> AccountController : index()
+AccountController --> 사용자 : "account/index"
+@enduml

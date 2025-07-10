@@ -1,0 +1,18 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountRestController
+participant UtilHelper
+participant MemberService
+participant FileHelper
+participant MailHelper
+participant RestHelper
+
+사용자 -> AccountRestController : resetPw(String userId, String email)
+AccountRestController -> UtilHelper : getRandomString(8)
+AccountRestController -> MemberService : resetPw(Member input)
+AccountRestController -> FileHelper : readString(mailTemplatePath)
+AccountRestController -> MailHelper : sendMail(email, subject, template)
+AccountRestController -> RestHelper : sendJson()
+AccountRestController --> 사용자 : JSON 응답
+@enduml

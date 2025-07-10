@@ -1,5 +1,5 @@
 @startuml
-!dpi 200
+skinparam dpi 200
 title AccountRestController Class Diagram
 
 class AccountRestController {

@@ -1,0 +1,20 @@
+@startuml
+skinparam dpi 200
+
+package kr.hossam.myshop.controllers {
+    class ExampleController {
+        + ExampleController(param1: Type1)
+        + methodOne(param2: Type2): ReturnType1
+        + methodTwo(param3: Type3): ReturnType2
+    }
+
+    class AnotherController {
+        + AnotherController(param4: Type4)
+        + methodThree(param5: Type5): ReturnType3
+    }
+
+    ExampleController --|> AnotherController : IsA
+    ExampleController --> SomeService : HasA
+}
+
+@enduml

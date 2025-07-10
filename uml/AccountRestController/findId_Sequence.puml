@@ -1,0 +1,14 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountRestController
+participant RegexHelper
+participant MemberService
+participant RestHelper
+
+사용자 -> AccountRestController : findId(String userName, String email)
+AccountRestController -> RegexHelper : 유효성 검사
+AccountRestController -> MemberService : findId(Member input)
+AccountRestController -> RestHelper : sendJson(Map<String, Object> data)
+AccountRestController --> 사용자 : JSON 응답
+@enduml

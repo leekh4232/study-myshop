@@ -6,6 +6,7 @@ import kr.hossam.myshop.helpers.FileHelper;
 import kr.hossam.myshop.helpers.MailHelper;
 import kr.hossam.myshop.helpers.RegexHelper;
 import kr.hossam.myshop.helpers.RestHelper;
+import kr.hossam.myshop.helpers.SessionCheckHelper;
 import kr.hossam.myshop.helpers.UtilHelper;
 import kr.hossam.myshop.models.Member;
 import kr.hossam.myshop.models.UploadItem;
@@ -66,6 +67,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "이미 사용중인 아이디 입니다.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> idUniqueCheck(@RequestParam("user_id") String userId,
             @Parameter(hidden=true) @SessionAttribute(value = "memberInfo", required = false) Member memberInfo)
             throws Exception {
@@ -108,6 +110,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "이미 사용중인 이메일 입니다.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> EmailUniqueCheck(@RequestParam("email") String email,
             @Parameter(hidden=true) @SessionAttribute(value = "memberInfo", required = false) Member memberInfo)
             throws Exception {
@@ -172,6 +175,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> join(@RequestParam("user_id") String userId,
             @RequestParam("user_pw") String userPw, @RequestParam("user_pw_re") String userPwRe,
             @RequestParam("user_name") String userName, @RequestParam("email") String email,
@@ -253,6 +257,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> login(HttpServletRequest request,
             @RequestParam("user_id") String userId, @RequestParam("user_pw") String userPw)
             throws Exception {
@@ -288,6 +293,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "200", description = "로그아웃 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public Map<String, Object> logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
@@ -313,6 +319,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> findId(@RequestParam("user_name") String userName,
             @RequestParam("email") String email) throws Exception {
 
@@ -354,6 +361,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> resetPw(@RequestParam("user_id") String userId,
             @RequestParam("email") String email) throws Exception {
 
@@ -403,6 +411,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public Map<String, Object> out(
         HttpServletRequest request,
         @Parameter(hidden=true) @SessionAttribute("memberInfo") Member memberInfo,
@@ -443,6 +452,7 @@ public class AccountRestController {
         @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
         @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
     })
+    @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public Map<String, Object> edit(
             HttpServletRequest request,                                     // 세션 갱신용
             @Parameter(hidden=true) @SessionAttribute("memberInfo") Member memberInfo,              // 현재 세션 정보 확인용

@@ -1,0 +1,17 @@
+@startuml
+skinparam dpi 200
+actor 사용자
+participant AccountRestController
+participant RegexHelper
+participant MemberService
+participant FileHelper
+participant RestHelper
+
+사용자 -> AccountRestController : edit(HttpServletRequest request, Member memberInfo, ...)
+AccountRestController -> RegexHelper : 유효성 검사
+AccountRestController -> MemberService : isUniqueEmail(Member input)
+AccountRestController -> FileHelper : saveMultipartFile(photo)
+AccountRestController -> MemberService : update(Member member)
+AccountRestController -> RestHelper : sendJson()
+AccountRestController --> 사용자 : JSON 응답
+@enduml
