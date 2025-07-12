@@ -5,16 +5,23 @@ import kr.hossam.myshop.models.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Slf4j
 @SpringBootTest
-@AutoConfigureMockMvc
 public class MemberMapperTests {
 
     @Autowired
     private MemberMapper memberMapper;
+
+    @Test
+    void selectCount() {
+        // 조건이 일치하는 회원 수 조회
+        Member input = new Member();
+        input.setUserId("hellouser");
+        int output = memberMapper.selectCount(input);
+        log.debug("output:{}", output);
+    }
 
     @Test
     void insert() {
@@ -45,15 +52,6 @@ public class MemberMapperTests {
 
         // selectItem 실행
         Member output = memberMapper.selectItem(input);
-        log.debug("output:{}", output);
-    }
-
-    @Test
-    void selectCount() {
-        // 조건이 일치하는 회원 수 조회
-        Member input = new Member();
-        input.setUserId("hellouser");
-        int output = memberMapper.selectCount(input);
         log.debug("output:{}", output);
     }
 

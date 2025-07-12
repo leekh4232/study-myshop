@@ -72,20 +72,20 @@ public class MyRestExceptionHandler {
             Exception e,
             WebRequest request) {
         ServletWebRequest servletWebRequest = (ServletWebRequest) request;
-        int status = servletWebRequest.getResponse().getStatus(); // 현재 상태 코드 취득
 
-        if (status == 200) {
+        // 기본 상태 코드는 INTERNAL_SERVER_ERROR로 설정
+        int status = HttpStatus.INTERNAL_SERVER_ERROR.value();
+
+        if (e instanceof MyException myException) {
+            // MyException을 상속받은 예외는 클래스에 정의되어 있는 값으로 상태 코드를 설정
+            status = myException.getStatus().value();
+        } else {
+            // 그 외의 예외는 EXCEPTION_STATUS_MAP에서 매핑된 상태 코드로 설정
+            // 매핑되지 않은 예외는 INTERNAL_SERVER_ERROR로 처리
             status = EXCEPTION_STATUS_MAP.getOrDefault(
                     e.getClass().getSimpleName(),
                     HttpStatus.INTERNAL_SERVER_ERROR
             ).value();
-        } else {
-            if (e instanceof MyException myException) {
-                status = myException.getStatus().value();
-            } else {
-                // 예외가 MyException이 아닌 경우, 기본적으로 INTERNAL_SERVER_ERROR로 설정
-                status = HttpStatus.INTERNAL_SERVER_ERROR.value();
-            }
         }
 
         log.error("========== Http {} Error =========", status);

@@ -9,6 +9,23 @@ import java.util.List;
 public interface MemberMapper {
 
     /**
+     * 검색 조건과 일치하는 회원 수를 조회한다.
+     *
+     * @param input - 회원 정보
+     * @return int - 검색 조건에 일치하는 회원 수
+     */
+    @Select("<script>"
+            + "SELECT COUNT(*) FROM members"
+            + "<where>"
+            + "<if test='userId != null'>user_id = #{userId}</if>"
+            + "<if test='email != null'>email = #{email}</if>"
+            // 회원정보 수정시 내 정보는 제외하고 중복검사 수행
+            + "<if test='id != 0'>AND id != #{id}</if>"
+            + "</where>"
+            + "</script>")
+    public int selectCount(Member input);
+
+    /**
      * 회원 정보를 등록한다.
      * 회원가입시 입력한 비밀번호는 MD5 해시로 암호화하여 저장한다.
      *
@@ -41,23 +58,6 @@ public interface MemberMapper {
     // application.properties에 정의된 옵션에 따라 자동 맵핑된다.
     @Results(id = "resultMap")
     public Member selectItem(Member input);
-
-    /**
-     * 검색 조건과 일치하는 회원 수를 조회한다.
-     *
-     * @param input - 회원 정보
-     * @return int - 검색 조건에 일치하는 회원 수
-     */
-    @Select("<script>"
-            + "SELECT COUNT(*) FROM members"
-            + "<where>"
-            + "<if test='userId != null'>user_id = #{userId}</if>"
-            + "<if test='email != null'>email = #{email}</if>"
-            // 회원정보 수정시 내 정보는 제외하고 중복검사 수행
-            + "<if test='id != 0'>AND id != #{id}</if>"
-            + "</where>"
-            + "</script>")
-    public int selectCount(Member input);
 
 
     /**

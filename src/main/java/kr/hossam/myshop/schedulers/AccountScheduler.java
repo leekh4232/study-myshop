@@ -2,7 +2,6 @@ package kr.hossam.myshop.schedulers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Component;
 import kr.hossam.myshop.helpers.FileHelper;
 import kr.hossam.myshop.models.Member;
 import kr.hossam.myshop.services.MemberService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 @EnableAsync
+@RequiredArgsConstructor
 public class AccountScheduler {
 
     /** 업로드 된 파일이 저장될 경로 (application.properties로부터 읽어옴) */
@@ -37,11 +38,11 @@ public class AccountScheduler {
     @Value("${thumbnail.height}")
     private int thumbnailHeight;
 
-    @Autowired
-    private FileHelper fileHelper;
+    /** 파일 처리 헬퍼 */
+    private final FileHelper fileHelper;
 
-    @Autowired
-    private MemberService memberService;
+    /** 회원 서비스 */
+    private final MemberService memberService;
 
     //@Scheduled(cron = "0 0 4 * * ?") // 매일 오전 4시에 자동 실행
     //@Scheduled(cron = "15 * * * * ?") // 매 분마다 15초에 실행

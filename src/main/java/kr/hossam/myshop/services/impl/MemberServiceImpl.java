@@ -15,6 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor // <-- 생성자 주입을 위한 어노테이션
 public class MemberServiceImpl implements MemberService {
+
+    /** 회원 관련 SQL을 구현하고 있는 Mapper */
     private final MemberMapper memberMapper;
 
     @Override
