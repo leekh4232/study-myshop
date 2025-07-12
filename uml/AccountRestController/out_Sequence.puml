@@ -1,12 +1,38 @@
 @startuml
 skinparam dpi 200
-actor 사용자
-participant AccountRestController
-participant MemberService
-participant RestHelper
 
-사용자 -> AccountRestController : out(HttpServletRequest request, Member memberInfo, String password)
-AccountRestController -> MemberService : out(Member memberInfo)
-AccountRestController -> RestHelper : sendJson()
-AccountRestController --> 사용자 : JSON 응답
+actor Actor as "사용자"
+participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
+participant MemberService
+participant MemberMapper
+participant Database
+
+Actor -> AccountRestController: DELETE /api/account/out(password: String)
+activate AccountRestController
+note right: @SessionCheckHelper(enable = true)
+
+AccountRestController -> MemberService: out(memberInfo: Member)
+activate MemberService
+MemberService -> MemberMapper: out(input: Member)
+activate MemberMapper
+MemberMapper -> Database: UPDATE
+activate Database
+note right: 회원 탈퇴 처리 (is_out='Y')
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+MemberService --> AccountRestController
+deactivate MemberService
+
+note over AccountRestController: 세션 무효화
+
+AccountRestController --> MyApiResponseAdvice: null
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
+deactivate MyApiResponseAdvice
+
 @enduml

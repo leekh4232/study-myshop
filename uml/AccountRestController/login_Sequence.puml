@@ -1,14 +1,54 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
 participant RegexHelper
 participant MemberService
-participant RestHelper
+participant MemberMapper
+participant Database
 
-사용자 -> AccountRestController : login(HttpServletRequest request, String userId, String userPw)
-AccountRestController -> RegexHelper : 유효성 검사
-AccountRestController -> MemberService : login(Member input)
-AccountRestController -> RestHelper : sendJson()
-AccountRestController --> 사용자 : JSON 응답
+Actor -> AccountRestController: POST /api/account/login(userId: String, userPw: String)
+activate AccountRestController
+note right: @SessionCheckHelper(enable = false)
+
+AccountRestController -> RegexHelper: 유효성 검사
+activate RegexHelper
+RegexHelper --> AccountRestController
+deactivate RegexHelper
+
+AccountRestController -> MemberService: login(input: Member)
+activate MemberService
+MemberService -> MemberMapper: login(input: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 로그인 정보 확인
+Database --> MemberMapper: Member
+deactivate Database
+MemberMapper --> MemberService: Member
+deactivate MemberMapper
+
+MemberService -> MemberMapper: updateLoginDate(output: Member)
+activate MemberMapper
+MemberMapper -> Database: UPDATE
+activate Database
+note right: 마지막 로그인 시간 갱신
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+MemberService --> AccountRestController: Member
+deactivate MemberService
+
+note over AccountRestController: 세션에 회원 정보 저장
+
+AccountRestController --> MyApiResponseAdvice: null
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
+deactivate MyApiResponseAdvice
+
 @enduml

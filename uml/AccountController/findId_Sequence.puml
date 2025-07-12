@@ -1,8 +1,13 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountController
 
-사용자 -> AccountController : findId()
-AccountController --> 사용자 : "account/find_id"
+Actor -> AccountController: GET /account/find_id
+activate AccountController
+note right: @SessionCheckHelper(enable = false)
+AccountController --> Actor: "account/find_id" 뷰 반환
+deactivate AccountController
+
 @enduml

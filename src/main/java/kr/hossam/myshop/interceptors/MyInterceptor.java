@@ -3,7 +3,6 @@ package kr.hossam.myshop.interceptors;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import kr.hossam.myshop.helpers.RestHelper;
 import kr.hossam.myshop.helpers.SessionCheckHelper;
 import kr.hossam.myshop.helpers.WebHelper;
 import lombok.RequiredArgsConstructor;
@@ -30,9 +29,6 @@ public class MyInterceptor implements HandlerInterceptor {
 
     /** WebHelper 객체 */
     private final WebHelper webHelper;
-
-    /** RestHelper 객체 */
-    private final RestHelper restHelper;
 
     /**
      * Controller 실행 전에 수행되는 메서드
@@ -127,9 +123,9 @@ public class MyInterceptor implements HandlerInterceptor {
                 if (enable) {           // 로그인 중에만 접근 가능한 페이지 검사
                     if (!isLoggedIn) {  // 로그인을 하지 않은 상태라면?
                         if (isRestful) {
-                            restHelper.badRequest("로그인이 필요합니다.");
+                            //restHelper.badRequest("로그인이 필요합니다.");
                         } else {
-                            webHelper.badRequest("로그인이 필요합니다.");
+                            //webHelper.badRequest("로그인이 필요합니다.");
                             //webHelper.redirect(403, "/account/login", "로그인이 필요합니다.");
                         }
 
@@ -138,9 +134,9 @@ public class MyInterceptor implements HandlerInterceptor {
                 } else {                // 로그인하지 않은 상태에서만 접근 가능한 페이지 검사
                     if (isLoggedIn) {   // 로그인을 한 상태라면?
                         if (isRestful) {
-                            restHelper.badRequest("로그인중에는 접근할 수 없습니다.");
+                            //restHelper.badRequest("로그인중에는 접근할 수 없습니다.");
                         } else {
-                            webHelper.badRequest("로그인 중에는 접근할 수 없습니다.");
+                            //webHelper.badRequest("로그인 중에는 접근할 수 없습니다.");
                         }
                         return false;
                     }

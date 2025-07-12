@@ -1,14 +1,42 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
 participant RegexHelper
 participant MemberService
-participant RestHelper
+participant MemberMapper
+participant Database
 
-사용자 -> AccountRestController : findId(String userName, String email)
-AccountRestController -> RegexHelper : 유효성 검사
-AccountRestController -> MemberService : findId(Member input)
-AccountRestController -> RestHelper : sendJson(Map<String, Object> data)
-AccountRestController --> 사용자 : JSON 응답
+Actor -> AccountRestController: POST /api/account/find_id(userName: String, email: String)
+activate AccountRestController
+note right: @SessionCheckHelper(enable = false)
+
+AccountRestController -> RegexHelper: 유효성 검사
+activate RegexHelper
+RegexHelper --> AccountRestController
+deactivate RegexHelper
+
+AccountRestController -> MemberService: findId(input: Member)
+activate MemberService
+MemberService -> MemberMapper: findId(input: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 이름, 이메일로 아이디 조회
+Database --> MemberMapper: Member
+deactivate Database
+MemberMapper --> MemberService: Member
+deactivate MemberMapper
+MemberService --> AccountRestController: Member
+deactivate MemberService
+
+AccountRestController --> MyApiResponseAdvice: Map<String, Object>(user_id)
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (아이디 반환)
+deactivate MyApiResponseAdvice
+
 @enduml

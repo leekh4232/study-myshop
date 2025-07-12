@@ -1,14 +1,60 @@
 @startuml
 skinparam dpi 200
-actor 사용자
-participant AccountRestController
-participant RegexHelper
-participant MemberService
-participant RestHelper
 
-사용자 -> AccountRestController : join(String userId, String userPw, String userPwRe, String userName, String email, String phone, String birthday, String gender, String postcode, String addr1)
-AccountRestController -> RegexHelper : 유효성 검사
-AccountRestController -> MemberService : 회원가입 처리
-AccountRestController -> RestHelper : sendJson()
-AccountRestController --> 사용자 : JSON 응답
+actor Actor as "사용자"
+participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
+participant RegexHelper
+participant FileHelper
+participant MemberService
+participant MemberMapper
+participant Database
+
+Actor -> AccountRestController: POST /api/account/join(userId: String, userPw: String, ...)
+activate AccountRestController
+note right: @SessionCheckHelper(enable = false)
+
+AccountRestController -> RegexHelper: 유효성 검사
+activate RegexHelper\
+RegexHelper --> AccountRestController
+deactivate RegexHelper
+
+AccountRestController -> FileHelper: saveMultipartFile(photo: MultipartFile)
+activate FileHelper
+FileHelper --> AccountRestController: UploadItem
+deactivate FileHelper
+
+AccountRestController -> MemberService: join(member: Member)
+activate MemberService
+MemberService -> MemberService: isUniqueUserId(member: Member)
+MemberService -> MemberService: isUniqueEmail(member: Member)
+MemberService -> MemberMapper: insert(input: Member)
+activate MemberMapper
+MemberMapper -> Database: INSERT
+activate Database
+note right: 회원 정보 등록
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+
+MemberService -> MemberMapper: selectItem(input: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 등록된 회원 정보 조회
+Database --> MemberMapper: Member
+deactivate Database
+MemberMapper --> MemberService: Member
+deactivate MemberMapper
+MemberService --> AccountRestController: Member
+deactivate MemberService
+
+AccountRestController --> MyApiResponseAdvice: null
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
+deactivate MyApiResponseAdvice
+
 @enduml

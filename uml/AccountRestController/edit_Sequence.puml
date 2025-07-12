@@ -1,17 +1,74 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
 participant RegexHelper
 participant MemberService
+participant MemberMapper
 participant FileHelper
-participant RestHelper
+participant Database
 
-사용자 -> AccountRestController : edit(HttpServletRequest request, Member memberInfo, ...)
-AccountRestController -> RegexHelper : 유효성 검사
-AccountRestController -> MemberService : isUniqueEmail(Member input)
-AccountRestController -> FileHelper : saveMultipartFile(photo)
-AccountRestController -> MemberService : update(Member member)
-AccountRestController -> RestHelper : sendJson()
-AccountRestController --> 사용자 : JSON 응답
+Actor -> AccountRestController: PUT /api/account/edit(userPw: String, newUserPw: String, ...)
+activate AccountRestController
+note right: @SessionCheckHelper(enable = true)
+
+AccountRestController -> RegexHelper: 유효성 검사
+activate RegexHelper
+RegexHelper --> AccountRestController
+deactivate RegexHelper
+
+AccountRestController -> MemberService: isUniqueEmail(input: Member)
+activate MemberService
+MemberService -> MemberMapper: selectCount(input: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 이메일 중복 검사
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+MemberService --> AccountRestController
+deactivate MemberService
+
+AccountRestController -> FileHelper: saveMultipartFile(photo: MultipartFile)
+activate FileHelper
+FileHelper --> AccountRestController: UploadItem
+deactivate FileHelper
+
+AccountRestController -> MemberService: update(member: Member)
+activate MemberService
+MemberService -> MemberMapper: update(input: Member)
+activate MemberMapper
+MemberMapper -> Database: UPDATE
+activate Database
+note right: 회원 정보 수정
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+
+MemberService -> MemberMapper: selectItem(input: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 수정된 회원 정보 조회
+Database --> MemberMapper: Member
+deactivate Database
+MemberMapper --> MemberService: Member
+deactivate MemberMapper
+MemberService --> AccountRestController: Member
+deactivate MemberService
+
+note over AccountRestController: 세션 정보 갱신
+
+AccountRestController --> MyApiResponseAdvice: null
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
+deactivate MyApiResponseAdvice
+
 @enduml

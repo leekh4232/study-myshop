@@ -1,8 +1,13 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountController
 
-사용자 -> AccountController : join()
-AccountController --> 사용자 : "account/join"
+Actor -> AccountController: GET /account/join
+activate AccountController
+note right: @SessionCheckHelper(enable = false)
+AccountController --> Actor: "account/join" 뷰 반환
+deactivate AccountController
+
 @enduml

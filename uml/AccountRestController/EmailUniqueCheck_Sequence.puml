@@ -1,14 +1,42 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
 participant RegexHelper
 participant MemberService
-participant RestHelper
+participant MemberMapper
+participant Database
 
-사용자 -> AccountRestController : EmailUniqueCheck(String email, Member memberInfo)
-AccountRestController -> RegexHelper : 유효성 검사
-AccountRestController -> MemberService : isUniqueEmail(Member input)
-AccountRestController -> RestHelper : sendJson()
-AccountRestController --> 사용자 : JSON 응답
+Actor -> AccountRestController: GET /api/account/email_unique_check?email={email}
+activate AccountRestController
+note right: @SessionCheckHelper(enable = false)
+
+AccountRestController -> RegexHelper: 유효성 검사
+activate RegexHelper
+RegexHelper --> AccountRestController
+deactivate RegexHelper
+
+AccountRestController -> MemberService: isUniqueEmail(input: Member)
+activate MemberService
+MemberService -> MemberMapper: selectCount(input: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 중복 이메일 조회
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+MemberService --> AccountRestController
+deactivate MemberService
+
+AccountRestController --> MyApiResponseAdvice: null
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
+deactivate MyApiResponseAdvice
+
 @enduml

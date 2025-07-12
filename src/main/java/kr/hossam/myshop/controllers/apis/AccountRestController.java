@@ -5,7 +5,6 @@ import kr.hossam.myshop.exceptions.StringFormatException;
 import kr.hossam.myshop.helpers.FileHelper;
 import kr.hossam.myshop.helpers.MailHelper;
 import kr.hossam.myshop.helpers.RegexHelper;
-import kr.hossam.myshop.helpers.RestHelper;
 import kr.hossam.myshop.helpers.SessionCheckHelper;
 import kr.hossam.myshop.helpers.UtilHelper;
 import kr.hossam.myshop.models.Member;
@@ -15,28 +14,17 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor // <-- Lombok을 사용하여 생성자 주입을 자동으로 생성
-@Tag(name = "Account API", description = "가입, 로그인, 정보수정, 탈퇴 등 회원 관련 API")
 public class AccountRestController {
 
     /** MemberService 객체 */
     private final MemberService memberService;
-
-    /** RestHelper 객체 */
-    private final RestHelper restHelper;
 
     /** 정규표현식 검사 객체 */
     private final RegexHelper regexHelper;
@@ -58,15 +46,6 @@ public class AccountRestController {
      * @return 중복 여부 결과에 대한 JSON 응답
      */
     @GetMapping("/api/account/id_unique_check")
-    @Operation(summary = "아이디 중복 검사", description = "파라미터로 받은 아이디의 중복 여부를 검사합니다.")
-    @Parameters({
-        @Parameter(name = "user_id", description = "검사할 아이디", schema = @Schema(type = "string"), required = true)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "사용 가능한 아이디 입니다.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "이미 사용중인 아이디 입니다.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> idUniqueCheck(@RequestParam("user_id") String userId,
             @Parameter(hidden=true) @SessionAttribute(value = "memberInfo", required = false) Member memberInfo)
@@ -90,7 +69,7 @@ public class AccountRestController {
 
         // 결과를 JSON 형태로 반환
         // RestHelper의 sendJson() 메서드는 기본적으로 성공 응답을 반환한다
-        return restHelper.sendJson();
+        return null;
     }
 
     /**
@@ -101,15 +80,6 @@ public class AccountRestController {
      * @return 중복 여부 결과에 대한 JSON 응답
      */
     @GetMapping("/api/account/email_unique_check")
-    @Operation(summary = "이메일 중복 검사", description = "파라미터로 받은 이메일의 중복 여부를 검사합니다.")
-    @Parameters({
-        @Parameter(name = "email", description = "검사할 이메일", schema = @Schema(type = "string"), required = true)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "사용 가능한 이메일 입니다.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "이미 사용중인 이메일 입니다.", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> EmailUniqueCheck(@RequestParam("email") String email,
             @Parameter(hidden=true) @SessionAttribute(value = "memberInfo", required = false) Member memberInfo)
@@ -132,8 +102,7 @@ public class AccountRestController {
         memberService.isUniqueEmail(input);
 
         // 결과를 JSON 형태로 반환
-        // RestHelper의 sendJson() 메서드는 기본적으로 성공 응답을 반환한다
-        return restHelper.sendJson();
+        return null;
     }
 
     /**
@@ -155,26 +124,6 @@ public class AccountRestController {
      * @throws Exception 입력값 유효성 검사 실패 또는 회원 가입 처리 중 예외 발생 시
      */
     @PostMapping("/api/account/join")
-    @Operation(summary = "회원가입", description = "회원가입을 처리합니다.")
-    @Parameters({
-        @Parameter(name = "user_id", description = "아이디", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "user_pw", description = "비밀번호", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "user_pw_re", description = "비밀번호 확인", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "user_name", description = "이름", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "email", description = "이메일", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "phone", description = "연락처", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "birthday", description = "생년월일", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "gender", description = "성별", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "postcode", description = "우편번호", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "addr1", description = "기본주소", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "addr2", description = "상세주소", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "photo", description = "프로필사진", schema = @Schema(type = "string"), required = false)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "회원가입 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> join(@RequestParam("user_id") String userId,
             @RequestParam("user_pw") String userPw, @RequestParam("user_pw_re") String userPwRe,
@@ -235,7 +184,7 @@ public class AccountRestController {
         memberService.join(member);
 
         /** 5) 결과 반환 */
-        return restHelper.sendJson();
+        return null;
     }
 
     /**
@@ -247,16 +196,6 @@ public class AccountRestController {
      * @throws Exception 입력값 유효성 검사 실패 또는 로그인 처리 중 예외 발생 시
      */
     @PostMapping("/api/account/login")
-    @Operation(summary = "로그인", description = "로그인을 처리합니다.")
-    @Parameters({
-        @Parameter(name = "user_id", description = "아이디", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "user_pw", description = "비밀번호", schema = @Schema(type = "string"), required = true)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "로그인 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> login(HttpServletRequest request,
             @RequestParam("user_id") String userId, @RequestParam("user_pw") String userPw)
@@ -278,7 +217,7 @@ public class AccountRestController {
         request.getSession().setAttribute("memberInfo", output);
 
         // 결과 반환
-        return restHelper.sendJson();
+        return null;
     }
 
     /**
@@ -288,16 +227,11 @@ public class AccountRestController {
      * @return 로그아웃 결과에 대한 JSON 응답
      */
     @GetMapping("/api/account/logout")
-    @Operation(summary = "로그아웃", description = "로그아웃을 처리합니다.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "로그아웃 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public Map<String, Object> logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return restHelper.sendJson();
+        return null;
     }
 
     /**
@@ -309,16 +243,6 @@ public class AccountRestController {
      * @throws Exception 입력값 유효성 검사 실패 또는 아이디 찾기 처리 중 예외 발생 시
      */
     @PostMapping("/api/account/find_id")
-    @Operation(summary = "아이디 찾기", description = "아이디를 찾습니다.")
-    @Parameters({
-        @Parameter(name = "user_name", description = "이름", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "email", description = "이메일", schema = @Schema(type = "string"), required = true)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "아이디 찾기 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> findId(@RequestParam("user_name") String userName,
             @RequestParam("email") String email) throws Exception {
@@ -340,7 +264,7 @@ public class AccountRestController {
         Map<String, Object> data = new LinkedHashMap<String, Object>();
         data.put("user_id", output.getUserId());
 
-        return restHelper.sendJson(data);
+        return data;
     }
 
     /**
@@ -351,16 +275,6 @@ public class AccountRestController {
      * @return 비밀번호 재설정 결과에 대한 JSON 응답
      */
     @PutMapping("/api/account/reset_pw")
-    @Operation(summary = "비밀번호 재설정", description = "비밀번호를 재설정합니다.")
-    @Parameters({
-        @Parameter(name = "user_id", description = "아이디", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "email", description = "이메일", schema = @Schema(type = "string"), required = true)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "비밀번호 재설정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> resetPw(@RequestParam("user_id") String userId,
             @RequestParam("email") String email) throws Exception {
@@ -390,7 +304,7 @@ public class AccountRestController {
         String subject = userId + "님의 비밀번호가 재설정 되었습니다.";
         mailHelper.sendMail(email, subject, template);
 
-        return restHelper.sendJson();
+        return null;
     }
 
     /**
@@ -402,15 +316,6 @@ public class AccountRestController {
      * @throws Exception    탈퇴 처리 중 예외 발생 시
      */
     @DeleteMapping("/api/account/out")
-    @Operation(summary = "회원탈퇴", description = "회원탈퇴를 처리합니다.")
-    @Parameters({
-        @Parameter(name = "password", description = "비밀번호", schema = @Schema(type = "string"), required = true)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "회원탈퇴 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public Map<String, Object> out(
         HttpServletRequest request,
@@ -427,31 +332,10 @@ public class AccountRestController {
         HttpSession session = request.getSession();
         session.invalidate();
 
-        return restHelper.sendJson();
+        return null;
     }
 
     @PutMapping("/api/account/edit")
-    @Operation(summary = "회원정보 수정", description = "회원정보를 수정합니다.")
-    @Parameters({
-        @Parameter(name = "user_pw", description = "현재 비밀번호", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "new_user_pw", description = "새 비밀번호", schema = @Schema(type = "string"), required = false),
-        @Parameter(name = "new_user_pw_confirm", description = "새 비밀번호 확인", schema = @Schema(type = "string"), required = false),
-        @Parameter(name = "user_name", description = "이름", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "email", description = "이메일", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "phone", description = "연락처", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "birthday", description = "생년월일", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "gender", description = "성별", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "postcode", description = "우편번호", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "addr1", description = "기본주소", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "addr2", description = "상세주소", schema = @Schema(type = "string"), required = true),
-        @Parameter(name = "delete_photo", description = "사진삭제 여부", schema = @Schema(type = "string"), required = false),
-        @Parameter(name = "photo", description = "프로필사진", schema = @Schema(type = "string"), required = false)
-    })
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "회원정보 수정 성공", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "400", description = "StringFormatException", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class))),
-        @ApiResponse(responseCode = "500", description = "Exception", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Map.class)))
-    })
     @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public Map<String, Object> edit(
             HttpServletRequest request,                                     // 세션 갱신용
@@ -538,7 +422,7 @@ public class AccountRestController {
             if (deletePhoto.equals("Y")) {
 
                 try {
-                    fileHelper.deleteFile(currentPhoto);
+                    //fileHelper.deleteFile(currentPhoto);
                 } catch (Exception e) {
                     // 파일 삭제에 실패한 경우 --> 예외를 발생시키지 않고 그냥 넘어간다.
                 }
@@ -572,6 +456,6 @@ public class AccountRestController {
         /** 6) 변경된 정보로 세션 갱신 */
         request.getSession().setAttribute("memberInfo", output);
 
-        return restHelper.sendJson();
+        return null;
     }
 }

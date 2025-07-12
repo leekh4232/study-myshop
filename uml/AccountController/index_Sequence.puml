@@ -1,8 +1,12 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountController
 
-사용자 -> AccountController : index()
-AccountController --> 사용자 : "account/index"
+Actor -> AccountController: GET / or /account
+activate AccountController
+AccountController --> Actor: "account/index" 뷰 반환
+deactivate AccountController
+
 @enduml

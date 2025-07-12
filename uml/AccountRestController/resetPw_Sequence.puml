@@ -1,18 +1,54 @@
 @startuml
 skinparam dpi 200
-actor 사용자
+
+actor Actor as "사용자"
 participant AccountRestController
+participant MyApiResponseAdvice
+participant MyRestExceptionHandler
 participant UtilHelper
 participant MemberService
+participant MemberMapper
 participant FileHelper
 participant MailHelper
-participant RestHelper
+participant Database
 
-사용자 -> AccountRestController : resetPw(String userId, String email)
-AccountRestController -> UtilHelper : getRandomString(8)
-AccountRestController -> MemberService : resetPw(Member input)
-AccountRestController -> FileHelper : readString(mailTemplatePath)
-AccountRestController -> MailHelper : sendMail(email, subject, template)
-AccountRestController -> RestHelper : sendJson()
-AccountRestController --> 사용자 : JSON 응답
+Actor -> AccountRestController: PUT /api/account/reset_pw(userId: String, email: String)
+activate AccountRestController
+note right: @SessionCheckHelper(enable = false)
+
+AccountRestController -> UtilHelper: getRandomString(length: int)
+activate UtilHelper
+UtilHelper --> AccountRestController: String(새 비밀번호)
+deactivate UtilHelper
+
+AccountRestController -> MemberService: resetPw(input: Member)
+activate MemberService
+MemberService -> MemberMapper: resetPw(input: Member)
+activate MemberMapper
+MemberMapper -> Database: UPDATE
+activate Database
+note right: 비밀번호 재설정
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+MemberService --> AccountRestController
+deactivate MemberService
+
+AccountRestController -> FileHelper: readString(mailTemplatePath: String)
+activate FileHelper
+FileHelper --> AccountRestController: String(메일 템플릿)
+deactivate FileHelper
+
+AccountRestController -> MailHelper: sendMail(email: String, subject: String, template: String)
+activate MailHelper
+MailHelper --> AccountRestController
+deactivate MailHelper
+
+AccountRestController --> MyApiResponseAdvice: null
+deactivate AccountRestController
+activate MyApiResponseAdvice
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
+deactivate MyApiResponseAdvice
+
 @enduml

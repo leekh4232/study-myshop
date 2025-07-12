@@ -1,8 +1,8 @@
 package kr.hossam.myshop.helpers;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -11,22 +11,31 @@ import org.springframework.stereotype.Component;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class MailHelper {
-    // -> import org.springframework.mail.javamail.JavaMailSender
-    @Autowired
+    /**
+     * 메일 발송을 위한 JavaMailSender 객체
+     *
+     * --> import org.springframework.mail.javamail.JavaMailSender;
+     */
     private final JavaMailSender javaMailSender = null;
 
-    // 환경설정파일에 설정된 값을 읽어들이기 위한 변수
-    // -> import org.springframework.beans.factory.annotation.Value;
+    /**
+     * 보내는 사람의 이름과 이메일 주소 (환경설정 파일에서 읽어옴)
+     */
     @Value("${mailhelper.sender.name}")
-    private final String senderName = null;
+    private String senderName = null;
 
+    /**
+     * 보내는 사람의 이메일 주소 (환경설정 파일에서 읽어옴)
+     */
     @Value("${mailhelper.sender.email}")
-    private final String senderEmail = null;
+    private String senderEmail = null;
 
     /**
      * 메일을 발송한다.
@@ -39,9 +48,7 @@ public class MailHelper {
      * @throws MessagingException
      */
     // --> import javax.mail.MessagingException;
-    public void sendMail(String receiverName, String receiverEmail, String subject, String content)
-            throws Exception {
-
+    public void sendMail(String receiverName, String receiverEmail, String subject, String content) throws Exception {
         log.debug("----------------------------------------------------");
         log.debug(String.format("RecvName: %s", receiverName));
         log.debug(String.format("RecvEmail: %s", receiverEmail));
@@ -59,10 +66,8 @@ public class MailHelper {
         try {
             helper.setSubject(subject);
             helper.setText(content, true);
-            helper.setTo(new InternetAddress(receiverEmail, receiverName, "UTF-8"));
-
-            // 보내는 사람의 주소와 이름을 환경설정 파일에서 읽어온 값으로 지정
-            helper.setFrom(new InternetAddress(senderEmail, senderName, "UTF-8"));
+            helper.setTo(new InternetAddress(receiverEmail, receiverName, StandardCharsets.UTF_8.name()));
+            helper.setFrom(new InternetAddress(senderEmail, senderName, StandardCharsets.UTF_8.name()));
 
             // 메일 보내기
             javaMailSender.send(message);

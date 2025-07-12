@@ -35,6 +35,7 @@ dependencies {
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	/** 직접 추가하는 부분 */
@@ -44,11 +45,9 @@ dependencies {
 	implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	// 썸네일 이미지 생성 라이브러리
 	implementation 'net.coobird:thumbnailator:0.4.20'
-	// Lombok이 단위 테스트에서 작동하도록 설정
+	// [신규] Lombok이 단위 테스트에서 작동하도록 설정
 	testAnnotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
-	// MyBatis 테스트 지원 라이브러리
-	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 	// [신규] Spring Session JDBC를 사용하여 세션 관리
 	implementation 'org.springframework.session:spring-session-jdbc'
 	// [신규] Restful API 문서 자동화
