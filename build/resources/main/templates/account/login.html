@@ -39,7 +39,7 @@
                 regexHelper.value('#user_id', "아이디를 입력하세요.");
                 regexHelper.value('#user_pw', '비밀번호를 입력하세요.');
             } catch (err) {
-                await utilHelper.alertDanger(err.message);
+                alert(err.message);
                 setTimeout(() => err.element.focus(), 500);
                 return false;
             }
@@ -47,7 +47,7 @@
             try {
                 await fetchHelper.post('[[@{/api/account/login}]]', new FormData(e.currentTarget));
             } catch (err) {
-                await utilHelper.alertDanger(err.message);
+                alert(err.message);
                 setTimeout(() => err.element.focus(), 500);
                 return false;
             }

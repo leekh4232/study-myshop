@@ -8,8 +8,7 @@
 
 <body>
     <!-- 로딩바 -->
-    <img th:src="@{/assets/img/loading.gif}" id="loader"
-        style="width: 100px; height: 100px; position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none" />
+    <img th:src="@{/assets/img/loading.gif}" id="loader" />
 
     <!-- 회원가입 폼 -->
     <div class="account-container">
@@ -122,7 +121,7 @@
             try {
                 regexHelper.value("#user_id", "아이디를 입력하세요");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 e.element.focus();
                 return;
             }
@@ -134,11 +133,11 @@
                 });
             } catch (e) {
                 console.error(e);
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 return;
             }
 
-            await utilHelper.alertSuccess("사용 가능한 아이디 입니다.");
+            alert("사용 가능한 아이디 입니다.");
             document.querySelector("#id_check").value = "Y";
         });
 
@@ -156,7 +155,7 @@
             try {
                 regexHelper.value("#email", "이메일을 입력하세요");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
                 setTimeout(() => e.element.focus(), 1);
                 return;
@@ -168,13 +167,12 @@
                     email: document.querySelector("#email").value
                 });
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
-                // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
-                setTimeout(() => e.element.focus(), 1);
+                alert(e.message);
+                e.element.focus()
                 return;
             }
 
-            await utilHelper.alertSuccess("사용 가능한 이메일 입니다.");
+            alert("사용 가능한 이메일 입니다.");
             document.querySelector("#email_check").value = "Y";
         });
 
@@ -224,10 +222,8 @@
                 regexHelper.value("#addr1", "주소를 입력하세요.");
                 regexHelper.value("#addr2", "상세주소를 입력하세요.");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
-
-                // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
-                setTimeout(() => e.element.focus(), 1);
+                alert(e.message);
+                e.element.focus();
                 return;
             }
 
@@ -236,12 +232,12 @@
             const emailCheck = document.querySelector("#email_check").value;
 
             if (idCheck === "N") {
-                utilHelper.alertWarning("아이디 중복 검사를 진행해주세요.");
+                alert("아이디 중복 검사를 진행해주세요.");
                 return;
             }
 
             if (emailCheck === "N") {
-                utilHelper.alertWarning("이메일 중복 검사를 진행해주세요.");
+                alert("이메일 중복 검사를 진행해주세요.");
                 return;
             }
 
@@ -253,7 +249,7 @@
                 data = await fetchHelper.post("[[@{/api/account/join}]]", formData);
             } catch (e) {
                 console.log(e);
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 return;
             }
 

@@ -169,7 +169,7 @@
             try {
                 regexHelper.value("#email", "이메일을 입력하세요");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
                 setTimeout(() => e.element.focus(), 1);
                 return;
@@ -181,7 +181,7 @@
                     email: document.querySelector("#email").value
                 });
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
                 setTimeout(() => e.element.focus(), 1);
                 return;
@@ -243,7 +243,7 @@
                 regexHelper.value("#addr1", "주소를 입력하세요.");
                 regexHelper.value("#addr2", "상세주소를 입력하세요.");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
 
                 // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
                 setTimeout(() => e.element.focus(), 1);
@@ -268,7 +268,7 @@
                 data = await fetchHelper.put("[[@{/api/account/edit}]]", formData);
             } catch (e) {
                 console.log(e);
-                await utilHelper.alertDanger(e.message);
+                alert(e.message);
                 return;
             }
 

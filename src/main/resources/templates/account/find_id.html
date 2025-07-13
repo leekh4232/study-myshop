@@ -64,7 +64,7 @@
                 regexHelper.value("#user_name", "이름를 입력하세요");
                 regexHelper.value("#email", "이메일 주소를 입력하세요");
             } catch (err) {
-                await utilHelper.alertDanger(err.message);
+                alert(err.message);
 
                 setTimeout(() => err.element.focus(), 1);
                 return;
@@ -76,7 +76,7 @@
             try {
                 data = await fetchHelper.post('[[@{/api/account/find_id}]]', new FormData(e.currentTarget));
             } catch (err) {
-                await utilHelper.alertDanger(err.message);
+                alert(err.message);
                 return;
             }
 

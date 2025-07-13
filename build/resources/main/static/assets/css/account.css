@@ -229,6 +229,17 @@ body {
     margin: 20px auto;
 }
 
+#loader {
+    width: 100px;
+    height: 100px;
+    position: fixed;
+    z-index: 1000;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+
 /* 미디어 쿼리: 화면 너비가 400px 이하일 때 */
 @media (max-width: 400px) {
     .container {

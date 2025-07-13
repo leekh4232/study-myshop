@@ -1,10 +1,10 @@
 @startuml
-skinparam dpi 200
+skinparam dpi 300
 
 actor Actor as "사용자"
 participant AccountRestController
 participant MyApiResponseAdvice
-participant MyRestExceptionHandler
+' participant MyRestExceptionHandler
 participant RegexHelper
 participant MemberService
 participant MemberMapper
@@ -12,7 +12,7 @@ participant Database
 
 Actor -> AccountRestController: GET /api/account/id_unique_check?user_id={userId}
 activate AccountRestController
-note right: @SessionCheckHelper(enable = false)
+' note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> RegexHelper: 유효성 검사
 activate RegexHelper

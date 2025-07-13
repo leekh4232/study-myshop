@@ -10,7 +10,7 @@ import kr.hossam.myshop.helpers.SessionCheckHelper;
 @Controller
 public class AccountController {
     /**
-     * 계정 관련 페이지로 이동
+     * 계정 관련 페이지 홈
      *
      * @return 계정 관련 페이지의 뷰 이름
      */

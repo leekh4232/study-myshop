@@ -39,9 +39,9 @@
                 return;
             }
 
-            const result = await utilHelper.confirmWarning("탈퇴확인", "정말 탈퇴하시겠습니까? 탈퇴 후에는 복구할 수 없습니다.");
+            const result = confirm("탈퇴확인", "정말 탈퇴하시겠습니까? 탈퇴 후에는 복구할 수 없습니다.");
 
-            if (result.value) {
+            if (result) {
                 try {
                     await fetchHelper.delete("[[@{/api/account/out}]]", new FormData(current));
                 } catch (e) {
@@ -50,7 +50,7 @@
                     return;
                 }
 
-                await utilHelper.alertSuccess("탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.");
+                alert("탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.");
                 window.location = "[[@{/account}]]";
             }
         });
