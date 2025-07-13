@@ -2,7 +2,6 @@ package kr.hossam.myshop.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import kr.hossam.myshop.helpers.SessionCheckHelper;
 
 /**
  * 계정 관련 요청을 처리하는 컨트롤러

@@ -50,4 +50,36 @@ public class AccountRestController {
         return null;
     }
 
+    /**
+     * 회원 이메일 중복 검사
+     *
+     * @param email 검사할 회원 이메일
+     * @param memberInfo 현재 로그인 중인 회원 정보 (세션에서 가져옴)
+     * @return 중복 여부 결과에 대한 JSON 응답
+     */
+    @GetMapping("/api/account/email_unique_check")
+    public Map<String, Object> EmailUniqueCheck(@RequestParam("email") String email,
+            @SessionAttribute(value = "memberInfo", required = false) Member memberInfo)
+            throws Exception {
+
+        // 입력값에 대한 유효성 검사
+        regexHelper.isValue(email, "이메일을 입력하세요.");
+        regexHelper.isEmail(email, "이메일 형식이 맞지 않습니다.");
+
+        // 중복 검사에 사용할 Member 객체 생성
+        Member input = new Member();
+        input.setEmail(email);
+
+        // 로그인 중이라면 현재 회원의 일련번호를 함께 전달한다.
+        if (memberInfo != null) {
+            input.setId(memberInfo.getId());
+        }
+
+        // 중복 검사 수행
+        memberService.isUniqueEmail(input);
+
+        // 결과를 JSON 형태로 반환
+        return null;
+    }
+
 }

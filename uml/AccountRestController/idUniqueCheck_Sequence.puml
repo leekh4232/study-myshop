@@ -1,5 +1,5 @@
 @startuml
-skinparam dpi 200
+skinparam dpi 300
 
 actor Actor as "사용자"
 participant AccountRestController

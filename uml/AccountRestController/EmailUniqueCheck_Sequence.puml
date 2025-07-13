@@ -1,5 +1,5 @@
 @startuml
-skinparam dpi 200
+skinparam dpi 300
 
 actor Actor as "사용자"
 participant AccountRestController
@@ -16,6 +16,8 @@ note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> RegexHelper: 유효성 검사
 activate RegexHelper
+note right of RegexHelper: 발생 가능한 예외:\n- StringFormatException\n  (이메일 미입력, 잘못된 이메일 형식)
+RegexHelper -->> MyRestExceptionHandler: StringFormatException
 RegexHelper --> AccountRestController
 deactivate RegexHelper
 
@@ -23,9 +25,13 @@ AccountRestController -> MemberService: isUniqueEmail(input: Member)
 activate MemberService
 MemberService -> MemberMapper: selectCount(input: Member)
 activate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- AlreadyExistsException\n  (이미 존재하는 이메일)
+MemberService -->> MyRestExceptionHandler: AlreadyExistsException
 MemberMapper -> Database: SELECT
 activate Database
 note right: 중복 이메일 조회
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: int
 deactivate Database
 MemberMapper --> MemberService: int
@@ -38,5 +44,8 @@ deactivate AccountRestController
 activate MyApiResponseAdvice
 MyApiResponseAdvice --> Actor: JSON 응답 (성공)
 deactivate MyApiResponseAdvice
+
+note over MyRestExceptionHandler: 모든 예외를 포착하여\nJSON 에러 응답으로 변환
+MyRestExceptionHandler --> Actor: JSON 에러 응답
 
 @enduml
