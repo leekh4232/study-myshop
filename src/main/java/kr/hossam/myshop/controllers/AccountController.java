@@ -25,7 +25,6 @@ public class AccountController {
      * @return 회원가입 페이지의 뷰 이름
      */
     @GetMapping("/account/join")
-    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public String join() {
         return "account/join";
     }
@@ -36,7 +35,6 @@ public class AccountController {
      * @return 회원가입 결과 페이지의 뷰 이름
      */
     @GetMapping("/account/join_result")
-    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public String joinResult() {
         return "account/join_result";
     }
@@ -47,7 +45,6 @@ public class AccountController {
      * @return 로그인 페이지의 뷰 이름
      */
     @GetMapping("/account/login")
-    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public String login() {
         return "account/login";
     }
@@ -58,7 +55,6 @@ public class AccountController {
      * @return 아이디 찾기 페이지의 뷰 이름
      */
     @GetMapping("/account/find_id")
-    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public String findId() {
         return "account/find_id";
     }
@@ -69,7 +65,6 @@ public class AccountController {
      * @return 비밀번호 재설정 페이지의 뷰 이름
      */
     @GetMapping("/account/reset_pw")
-    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public String resetPw() {
         return "account/reset_pw";
     }
@@ -80,7 +75,6 @@ public class AccountController {
      * @return 회원 탈퇴 페이지의 뷰 이름
      */
     @GetMapping("/account/out")
-    @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public String out() {
         return "account/out";
     }
@@ -91,7 +85,6 @@ public class AccountController {
      * @return 회원 정보 수정 페이지의 뷰 이름
      */
     @GetMapping("/account/edit")
-    @SessionCheckHelper(enable = true) // <-- 로그인 상태에서만 접근 가능함
     public String edit() {
         return "account/edit";
     }
