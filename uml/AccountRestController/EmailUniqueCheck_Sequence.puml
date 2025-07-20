@@ -12,7 +12,7 @@ participant Database
 
 Actor -> AccountRestController: GET /api/account/email_unique_check?email={email}
 activate AccountRestController
-note right: @SessionCheckHelper(enable = false)
+' note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> RegexHelper: 유효성 검사
 activate RegexHelper
@@ -25,8 +25,6 @@ AccountRestController -> MemberService: isUniqueEmail(input: Member)
 activate MemberService
 MemberService -> MemberMapper: selectCount(input: Member)
 activate MemberMapper
-note right of MemberService: 발생 가능한 예외:\n- AlreadyExistsException\n  (이미 존재하는 이메일)
-MemberService -->> MyRestExceptionHandler: AlreadyExistsException
 MemberMapper -> Database: SELECT
 activate Database
 note right: 중복 이메일 조회
@@ -36,6 +34,8 @@ Database --> MemberMapper: int
 deactivate Database
 MemberMapper --> MemberService: int
 deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- AlreadyExistsException\n  (이미 존재하는 이메일)
+MemberService -->> MyRestExceptionHandler: AlreadyExistsException
 MemberService --> AccountRestController
 deactivate MemberService
 

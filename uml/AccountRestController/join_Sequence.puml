@@ -11,32 +11,70 @@ participant MemberService
 participant MemberMapper
 participant Database
 
-Actor -> AccountRestController: POST /api/account/join(userId: String, userPw: String, ...)
+Actor -> AccountRestController: POST /api/account/join\n(userId: String, userPw: String, userPwRe: String, ...)
 activate AccountRestController
-note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> RegexHelper: 유효성 검사
-activate RegexHelper\
+activate RegexHelper
+note right of RegexHelper: 발생 가능한 예외:\n- StringFormatException\n  (필드 미입력, 형식 오류)
+RegexHelper -->> MyRestExceptionHandler: StringFormatException
 RegexHelper --> AccountRestController
 deactivate RegexHelper
 
 AccountRestController -> FileHelper: saveMultipartFile(photo: MultipartFile)
 activate FileHelper
+note right of FileHelper: 발생 가능한 예외:\n- IOException\n  (파일 처리 오류)
+FileHelper -->> MyRestExceptionHandler: IOException
 FileHelper --> AccountRestController: UploadItem
 deactivate FileHelper
 
-AccountRestController -> MemberService: join(member: Member)
+AccountRestController -> MemberService: join(input: Member)
 activate MemberService
-MemberService -> MemberService: isUniqueUserId(member: Member)
-MemberService -> MemberService: isUniqueEmail(member: Member)
+
+MemberService -> MemberService: isUniqueUserId(temp1: Member)
+activate MemberService
+MemberService -> MemberMapper: selectCount(temp1: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 아이디 중복 검사
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database -->> MyRestExceptionHandler: SQLException
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- AlreadyExistsException\n  (이미 존재하는 아이디)
+MemberService -->> MyRestExceptionHandler: AlreadyExistsException
+deactivate MemberService
+
+MemberService -> MemberService: isUniqueEmail(temp2: Member)
+activate MemberService
+MemberService -> MemberMapper: selectCount(temp2: Member)
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 이메일 중복 검사
+Database -->> MyRestExceptionHandler: SQLException
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- AlreadyExistsException\n  (이미 존재하는 이메일)
+MemberService -->> MyRestExceptionHandler: AlreadyExistsException
+deactivate MemberService
+
 MemberService -> MemberMapper: insert(input: Member)
 activate MemberMapper
 MemberMapper -> Database: INSERT
 activate Database
 note right: 회원 정보 등록
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: int
 deactivate Database
 MemberMapper --> MemberService: int
+note right of MemberService: 발생 가능한 예외:\n- ServiceNoResultException\n  (저장 실패)
+MemberService -->> MyRestExceptionHandler: ServiceNoResultException
 deactivate MemberMapper
 
 MemberService -> MemberMapper: selectItem(input: Member)
@@ -44,10 +82,12 @@ activate MemberMapper
 MemberMapper -> Database: SELECT
 activate Database
 note right: 등록된 회원 정보 조회
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: Member
 deactivate Database
 MemberMapper --> MemberService: Member
 deactivate MemberMapper
+
 MemberService --> AccountRestController: Member
 deactivate MemberService
 
@@ -56,5 +96,8 @@ deactivate AccountRestController
 activate MyApiResponseAdvice
 MyApiResponseAdvice --> Actor: JSON 응답 (성공)
 deactivate MyApiResponseAdvice
+
+note over MyRestExceptionHandler: 모든 예외를 포착하여\nJSON 에러 응답으로 변환
+MyRestExceptionHandler --> Actor: JSON 에러 응답
 
 @enduml
