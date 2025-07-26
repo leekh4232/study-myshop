@@ -2,6 +2,8 @@ kr.hossam.myshop.controllers 패키지와 그 하위 패키지에 포함된 모�
 
 kr.hossam.myshop.controllers.AccountRestController 클래스의 out 메서드에 대한 시퀀스 다이어그램을 PlantUML 로 만들어야 합니다.
 
+kr.hossam.myshop.schedulers.AccountScheduler 클래스의 processOutMembers 메서드에 대한 시퀀스 다이어그램을 PlantUML 로 만들어야 합니다.
+
 /uml/AccountRestController/EmailUniqueCheck_Sequence.puml 파일은 참고할 수 있는 예시입니다.
 
 다음에 유의해서 각각의 시퀀스 다이어그램을 생성해 주세요.

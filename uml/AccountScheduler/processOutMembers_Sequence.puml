@@ -1,0 +1,54 @@
+@startuml
+skinparam dpi 200
+
+participant "Spring Scheduler" as Scheduler
+participant AccountScheduler
+participant MemberService
+participant MemberMapper
+participant FileHelper
+participant Database
+
+Scheduler -> AccountScheduler: processOutMembers()
+activate AccountScheduler
+
+AccountScheduler -> MemberService: processOutMembers()
+activate MemberService
+
+MemberService -> MemberMapper: selectOutMembersPhoto()
+activate MemberMapper
+MemberMapper -> Database: SELECT
+activate Database
+note right: 탈퇴 회원 프로필 사진 조회
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database --> MemberMapper: List<Member>
+deactivate Database
+MemberMapper --> MemberService: List<Member> output
+deactivate MemberMapper
+
+MemberService -> MemberMapper: deleteOutMembers()
+activate MemberMapper
+MemberMapper -> Database: DELETE
+activate Database
+note right: 탈퇴 회원 데이터 삭제
+Database --> MemberMapper: int
+deactivate Database
+MemberMapper --> MemberService: int
+deactivate MemberMapper
+
+MemberService --> AccountScheduler: List<Member> outMembers
+deactivate MemberService
+
+note right of AccountScheduler: 발생 가능한 예외:\n- Exception\n  (탈퇴 회원 조회 및 삭제 실패)
+
+loop for each member in outMembers
+    AccountScheduler -> FileHelper: deleteFile(photo: String)
+    activate FileHelper
+    note right of FileHelper: 발생 가능한 예외:\n- Exception\n  (파일 삭제 실패)
+    FileHelper --> AccountScheduler
+    deactivate FileHelper
+end
+
+AccountScheduler --> Scheduler
+deactivate AccountScheduler
+
+@enduml
