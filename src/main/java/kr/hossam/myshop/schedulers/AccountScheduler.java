@@ -67,7 +67,7 @@ public class AccountScheduler {
 
         for (int i=0; i<outMembers.size(); i++) {
             Member m = outMembers.get(i);
-            //fileHelper.deleteFile(m.getPhoto());
+            fileHelper.deleteFile(m.getPhoto());
         }
     }
 }
