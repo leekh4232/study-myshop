@@ -273,46 +273,6 @@ public class AccountRestController {
     }
 
     /**
-     * 아이디와 이메일이 일치하는 회원의 비밀번호를 재설정하고 임시 비밀번호를 이메일로 발송한다.
-     *
-     * @param userId 회원 아이디
-     * @param email 회원 이메일
-     * @return 비밀번호 재설정 결과에 대한 JSON 응답
-     */
-    @PutMapping("/api/account/reset_pw")
-    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
-    public Map<String, Object> resetPw(@RequestParam("user_id") String userId,
-            @RequestParam("email") String email) throws Exception {
-
-        /** 1) 임시 비밀번호를 DB에 갱신하기 */
-        String newPassword = utilHelper.getRandomString(8);
-        Member input = new Member();
-        input.setUserId(userId);
-        input.setEmail(email);
-        input.setUserPw(newPassword);
-
-        memberService.resetPw(input);
-
-        /** 2) 이메일 발송을 위한 템플릿 처리 */
-        // 메일 템플릿 파일 경로
-        ClassPathResource resource = new ClassPathResource("mail_templates/reset_pw.html");
-        String mailTemplatePath = resource.getFile().getAbsolutePath();
-
-        // 메일 템플릿 파일 가져오기
-        String template = fileHelper.readString(mailTemplatePath);
-
-        // 메일 템플릿 안의 치환자 처리
-        template = template.replace("{{userId}}", userId);
-        template = template.replace("{{password}}", newPassword);
-
-        /** 3) 메일 발송 */
-        String subject = userId + "님의 비밀번호가 재설정 되었습니다.";
-        mailHelper.sendMail(email, subject, template);
-
-        return restHelper.sendJson();
-    }
-
-    /**
      * 회원 탈퇴 처리
      * @param request       HTTP 요청 객체
      * @param memberInfo    현재 로그인 중인 회원 정보 (세션에서 가져옴)

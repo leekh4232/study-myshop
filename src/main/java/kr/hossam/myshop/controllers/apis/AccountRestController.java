@@ -295,8 +295,15 @@ public class AccountRestController {
             @RequestParam("user_id") String userId,
             @RequestParam("email") String email) throws Exception {
 
-        /** 1) 임시 비밀번호를 DB에 갱신하기 */
+        // 입력값에 대한 유효성 검사
+        regexHelper.isValue(userId, "아이디를 입력하세요.");
+        regexHelper.isValue(email, "이메일을 입력하세요.");
+        regexHelper.isEmail(email, "이메일 형식이 잘못되었습니다.");
+
+        // 임시 비밀번호 생성하기
         String newPassword = utilHelper.getRandomString(8);
+
+        // 임시 비밀번호 DB 갱신
         Member input = new Member();
         input.setUserId(userId);
         input.setEmail(email);
@@ -304,8 +311,7 @@ public class AccountRestController {
 
         memberService.resetPw(input);
 
-        /** 2) 이메일 발송을 위한 템플릿 처리 */
-        // 메일 템플릿 파일 경로
+        // 이메일 발송을 위한 템플릿 경로 설정
         ClassPathResource resource = new ClassPathResource("mail_templates/reset_pw.html");
         String mailTemplatePath = resource.getFile().getAbsolutePath();
 
@@ -316,7 +322,7 @@ public class AccountRestController {
         template = template.replace("{{userId}}", userId);
         template = template.replace("{{password}}", newPassword);
 
-        /** 3) 메일 발송 */
+        // 메일 발송
         String subject = userId + "님의 비밀번호가 재설정 되었습니다.";
         mailHelper.sendMail(email, subject, template);
 
