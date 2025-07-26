@@ -106,6 +106,34 @@ public interface MemberMapper {
     public int resetPw(Member input);
 
     /**
+     * 회원 정보를 수정한다.
+     * 회원정보 수정시 입력한 비밀번호는 MD5 해시로 암호화하여 저장한다.
+     * 신규 비밀번호가 입력된 경우에만 비밀번호를 수정한다.
+     *
+     * @param input - 회원 정보
+     * @return int - 수정된 행의 수
+     */
+    @Update("<script>"
+            + "UPDATE members SET "
+            // 아이디는 수정하지 않는다.
+            + "user_name = #{userName},"
+            // 신규 비밀번호가 입력 된 경우만 UPDATE절에 추가함
+            + "<if test='newUserPw != null and newUserPw != \"\"'>user_pw = MD5(#{newUserPw}),</if>"
+            + "email = #{email},"
+            + "phone = #{phone},"
+            + "birthday = #{birthday},"
+            + "gender = #{gender},"
+            + "postcode = #{postcode},"
+            + "addr1 = #{addr1},"
+            + "addr2 = #{addr2},"
+            + "photo = #{photo},"
+            + "edit_date = NOW()"
+            // 세션의 일련번호와 입력한 비밀번호가 일치할 경우만 수정
+            + "WHERE id = #{id} AND user_pw = MD5(#{userPw})"
+            + "</script>")
+    public int update(Member input);
+
+    /**
      * 회원 탈퇴를 처리한다.
      * 입력한 비밀번호가 일치하는 경우에만 탈퇴 처리를 수행하며, is_out 값을 'Y'로 변경하고 edit_date를 현재 시간으로 설정한다.
      *
@@ -142,32 +170,4 @@ public interface MemberMapper {
             + "WHERE is_out='Y' AND  "
             + "edit_date < DATE_ADD(NOW(), interval -1 minute)")
     public int deleteOutMembers();
-
-    /**
-     * 회원 정보를 수정한다.
-     * 회원정보 수정시 입력한 비밀번호는 MD5 해시로 암호화하여 저장한다.
-     * 신규 비밀번호가 입력된 경우에만 비밀번호를 수정한다.
-     *
-     * @param input - 회원 정보
-     * @return int - 수정된 행의 수
-     */
-    @Update("<script>"
-            + "UPDATE members SET "
-            // 아이디는 수정하지 않는다.
-            + "user_name = #{userName},"
-            // 신규 비밀번호가 입력 된 경우만 UPDATE절에 추가함
-            + "<if test='newUserPw != null and newUserPw != \"\"'>user_pw = MD5(#{newUserPw}),</if>"
-            + "email = #{email},"
-            + "phone = #{phone},"
-            + "birthday = #{birthday},"
-            + "gender = #{gender},"
-            + "postcode = #{postcode},"
-            + "addr1 = #{addr1},"
-            + "addr2 = #{addr2},"
-            + "photo = #{photo},"
-            + "edit_date = NOW()"
-            // 세션의 일련번호와 입력한 비밀번호가 일치할 경우만 수정
-            + "WHERE id = #{id} AND user_pw = MD5(#{userPw})"
-            + "</script>")
-    public int update(Member input);
 }
