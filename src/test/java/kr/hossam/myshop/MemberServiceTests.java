@@ -99,8 +99,8 @@ class MemberServiceTests {
     void testFindId() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
-        input.setUserName("테스트유저1");
-        input.setEmail("leekh4232@gmail.com");
+        input.setUserName("테스트유저");
+        input.setEmail("testuser@example.com");
 
         Member output = null;
         try {

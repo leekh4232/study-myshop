@@ -5,6 +5,7 @@ actor Actor as "사용자"
 participant AccountRestController
 participant MyApiResponseAdvice
 participant MyRestExceptionHandler
+participant RegexHelper
 participant UtilHelper
 participant MemberService
 participant MemberMapper
@@ -12,12 +13,20 @@ participant FileHelper
 participant MailHelper
 participant Database
 
-Actor -> AccountRestController: PUT /api/account/reset_pw(userId: String, email: String)
+Actor -> AccountRestController: PUT /api/account/reset_pw?user_id={userId}&email={email}
 activate AccountRestController
+' note right: @SessionCheckHelper(enable = false)
+
+AccountRestController -> RegexHelper: 유효성 검사
+activate RegexHelper
+note right of RegexHelper: 발생 가능한 예외:\n- StringFormatException\n  (아이디 미입력, 이메일 미입력,\n   잘못된 이메일 형식)
+RegexHelper -->> MyRestExceptionHandler: StringFormatException
+RegexHelper --> AccountRestController
+deactivate RegexHelper
 
 AccountRestController -> UtilHelper: getRandomString(length: int)
 activate UtilHelper
-UtilHelper --> AccountRestController: String newPassword
+UtilHelper --> AccountRestController: String
 deactivate UtilHelper
 
 AccountRestController -> MemberService: resetPw(input: Member)
@@ -38,17 +47,18 @@ MemberService -->> MyRestExceptionHandler: Exception
 MemberService --> AccountRestController
 deactivate MemberService
 
-AccountRestController -> FileHelper: readString(mailTemplatePath: String)
+AccountRestController -> FileHelper: readString(filePath: String)
 activate FileHelper
-note right of FileHelper: 발생 가능한 예외:\n- IOException\n  (파일 읽기 실패)
-FileHelper -->> MyRestExceptionHandler: IOException
-FileHelper --> AccountRestController: String template
+note right of FileHelper: 발생 가능한 예외:\n- Exception\n  (파일 입출력 예외)
+FileHelper -->> MyRestExceptionHandler: Exception
+FileHelper --> AccountRestController: String
 deactivate FileHelper
 
 AccountRestController -> MailHelper: sendMail(email: String, subject: String, template: String)
 activate MailHelper
-note right of MailHelper: 발생 가능한 예외:\n- MessagingException\n  (이메일 발송 실패)
+note right of MailHelper: 발생 가능한 예외:\n- MessagingException\n  (메일 발송 실패)\n- UnsupportedEncodingException\n  (지원하지 않는 인코딩)
 MailHelper -->> MyRestExceptionHandler: MessagingException
+MailHelper -->> MyRestExceptionHandler: UnsupportedEncodingException
 MailHelper --> AccountRestController
 deactivate MailHelper
 

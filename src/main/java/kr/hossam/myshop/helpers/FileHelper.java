@@ -368,4 +368,26 @@ public class FileHelper {
 
         return thumbnailPath;
     }
+
+    /**
+     * 업로드 된 파일의 URL을 반환하는 메서드
+     * @param filePath - 파일 경로
+     * @return 파일 URL
+     * @throws Exception - 파일 입출력 예외
+     */
+    public String getFileUrl(String filePath) throws Exception {
+        if (filePath == null || filePath.isEmpty()) {
+            return null;
+        }
+
+        // 파일이 존재하는지 확인
+        File file = new File(uploadDir, filePath);
+        if (!file.exists()) {
+            return null;
+        }
+
+        // 파일 URL 생성
+        String fileUrl = String.format("%s%s", uploadUrl, filePath);
+        return fileUrl;
+    }
 }

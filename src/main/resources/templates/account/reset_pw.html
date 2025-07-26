@@ -44,7 +44,7 @@
                 regexHelper.value("#email", "이메일 주소를 입력하세요");
             } catch (err) {
                 alert(err.message);
-                err.element.focus()
+                err.element.focus();
                 return false;
             }
 
@@ -55,7 +55,6 @@
                 data = await fetchHelper.put('[[@{/api/account/reset_pw}]]', new FormData(e.currentTarget));
             } catch (err) {
                 alert(err.message);
-                err.element.focus()
                 return false;
             }
 
