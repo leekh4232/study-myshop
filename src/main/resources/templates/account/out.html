@@ -36,8 +36,8 @@
             try {
                 regexHelper.value("#user_pw", "비밀번호를 입력하세요");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
-                setTimeout(() => e.element.focus(), 300);
+                alert(e.message);
+                e.element.focus();
                 return;
             }
 
@@ -47,8 +47,7 @@
                 try {
                     await fetchHelper.delete("[[@{/api/account/out}]]", new FormData(current));
                 } catch (e) {
-                    await utilHelper.alertDanger(e.message);
-                    console.error(err);
+                    alert(e.message);
                     return;
                 }
 

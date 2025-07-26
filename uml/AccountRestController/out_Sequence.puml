@@ -11,28 +11,35 @@ participant Database
 
 Actor -> AccountRestController: DELETE /api/account/out(password: String)
 activate AccountRestController
-note right: @SessionCheckHelper(enable = true)
 
 AccountRestController -> MemberService: out(memberInfo: Member)
 activate MemberService
-MemberService -> MemberMapper: out(input: Member)
+MemberService -> MemberMapper: out(memberInfo: Member)
 activate MemberMapper
 MemberMapper -> Database: UPDATE
 activate Database
-note right: 회원 탈퇴 처리 (is_out='Y')
+note right: 회원 탈퇴 처리
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: int
 deactivate Database
 MemberMapper --> MemberService: int
 deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- ServiceNoResultException\n  (비밀번호 불일치 또는 미가입 회원)
+MemberService -->> MyRestExceptionHandler: ServiceNoResultException
 MemberService --> AccountRestController
 deactivate MemberService
 
-note over AccountRestController: 세션 무효화
+note over AccountRestController: 세션 무효화 처리
+AccountRestController -> AccountRestController: request.getSession().invalidate()
 
 AccountRestController --> MyApiResponseAdvice: null
 deactivate AccountRestController
 activate MyApiResponseAdvice
 MyApiResponseAdvice --> Actor: JSON 응답 (성공)
 deactivate MyApiResponseAdvice
+
+note over MyRestExceptionHandler: 모든 예외를 포착하여\nJSON 에러 응답으로 변환
+MyRestExceptionHandler --> Actor: JSON 에러 응답
 
 @enduml

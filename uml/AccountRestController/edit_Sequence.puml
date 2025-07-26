@@ -11,12 +11,13 @@ participant MemberMapper
 participant FileHelper
 participant Database
 
-Actor -> AccountRestController: PUT /api/account/edit(userPw: String, newUserPw: String, ...)
+Actor -> AccountRestController: PUT /api/account/edit(...)
 activate AccountRestController
-note right: @SessionCheckHelper(enable = true)
 
 AccountRestController -> RegexHelper: 유효성 검사
 activate RegexHelper
+note right of RegexHelper: 발생 가능한 예외:\n- StringFormatException\n  (각종 입력값 검증 실패)
+RegexHelper -->> MyRestExceptionHandler: StringFormatException
 RegexHelper --> AccountRestController
 deactivate RegexHelper
 
@@ -26,22 +27,35 @@ MemberService -> MemberMapper: selectCount(input: Member)
 activate MemberMapper
 MemberMapper -> Database: SELECT
 activate Database
-note right: 이메일 중복 검사
+note right: 이메일 중복 확인
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: int
 deactivate Database
 MemberMapper --> MemberService: int
 deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- AlreadyExistsException\n  (이미 존재하는 이메일)
+MemberService -->> MyRestExceptionHandler: AlreadyExistsException
 MemberService --> AccountRestController
 deactivate MemberService
 
 AccountRestController -> FileHelper: saveMultipartFile(photo: MultipartFile)
 activate FileHelper
+note right of FileHelper: 발생 가능한 예외:\n- Exception\n  (파일 업로드 실패)
+FileHelper -->> MyRestExceptionHandler: Exception
 FileHelper --> AccountRestController: UploadItem
+deactivate FileHelper
+
+AccountRestController -> FileHelper: deleteFile(currentPhoto: String)
+activate FileHelper
+note right of FileHelper: 발생 가능한 예외:\n- Exception\n  (파일 삭제 실패)
+FileHelper -->> MyRestExceptionHandler: Exception
+FileHelper --> AccountRestController
 deactivate FileHelper
 
 AccountRestController -> MemberService: update(member: Member)
 activate MemberService
-MemberService -> MemberMapper: update(input: Member)
+MemberService -> MemberMapper: update(member: Member)
 activate MemberMapper
 MemberMapper -> Database: UPDATE
 activate Database
@@ -51,16 +65,18 @@ deactivate Database
 MemberMapper --> MemberService: int
 deactivate MemberMapper
 
-MemberService -> MemberMapper: selectItem(input: Member)
+MemberService -> MemberMapper: selectItem(member: Member)
 activate MemberMapper
 MemberMapper -> Database: SELECT
 activate Database
 note right: 수정된 회원 정보 조회
 Database --> MemberMapper: Member
 deactivate Database
-MemberMapper --> MemberService: Member
+MemberMapper --> MemberService: Member output
 deactivate MemberMapper
-MemberService --> AccountRestController: Member
+note right of MemberService: 발생 가능한 예외:\n- Exception\n  (현재 비밀번호를 확인하세요)
+MemberService -->> MyRestExceptionHandler: Exception
+MemberService --> AccountRestController: Member output
 deactivate MemberService
 
 note over AccountRestController: 세션 정보 갱신
@@ -70,5 +86,8 @@ deactivate AccountRestController
 activate MyApiResponseAdvice
 MyApiResponseAdvice --> Actor: JSON 응답 (성공)
 deactivate MyApiResponseAdvice
+
+note over MyRestExceptionHandler: 모든 예외를 포착하여\nJSON 에러 응답으로 변환
+MyRestExceptionHandler --> Actor: JSON 에러 응답
 
 @enduml

@@ -4,6 +4,7 @@ import kr.hossam.myshop.helpers.UtilHelper;
 import kr.hossam.myshop.models.Member;
 import kr.hossam.myshop.services.MemberService;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -136,23 +137,6 @@ class MemberServiceTests {
     }
 
     @Test
-    void testOutMember() {
-        // 테스트용 회원 정보 생성
-        Member input = new Member();
-        input.setId(5);             // 존재하는 회원의 ID로 설정
-        input.setUserPw("1234");    // 탈퇴할 때 사용할 비밀번호
-
-        try {
-            memberService.out(input);
-        } catch (Exception e) {
-            log.error("회원 탈퇴에 실패했습니다.", e);
-            return;
-        }
-
-        log.debug("회원 탈퇴가 성공적으로 처리되었습니다.");
-    }
-
-    @Test
     void testEditMember() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
@@ -180,5 +164,40 @@ class MemberServiceTests {
             return;
         }
         log.debug("output:{}", output.toString());
+    }
+
+    @Test
+    void testOutMember() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(1);             // 존재하는 회원의 ID로 설정
+        input.setUserPw("1234");    // 탈퇴할 때 사용할 비밀번호
+
+        try {
+            memberService.out(input);
+        } catch (Exception e) {
+            log.error("회원 탈퇴에 실패했습니다.", e);
+            return;
+        }
+
+        log.debug("회원 탈퇴가 성공적으로 처리되었습니다.");
+    }
+
+    @Test
+    void testProcessOutMembers() {
+        List<Member> output = null;
+
+        try {
+            output = memberService.processOutMembers();
+        } catch (Exception e) {
+            log.error("탈퇴 처리에 실패했습니다.", e);
+            return;
+        }
+
+        if (output != null && !output.isEmpty()) {
+            log.debug("탈퇴 처리된 회원 목록: {}", output);
+        } else {
+            log.debug("탈퇴 처리된 회원이 없습니다.");
+        }
     }
 }

@@ -62,6 +62,16 @@ public interface MemberService {
     public void resetPw(Member input) throws Exception;
 
     /**
+     * 회원 정보를 업데이트한다.
+     * 입력된 회원 정보를 바탕으로 회원 정보를 수정하고, 수정된 회원 정보를 반환한다.
+     *
+     * @param input - 회원 정보
+     * @return Member - 수정된 회원 정보
+     * @throws Exception - 예외 발생 시
+     */
+    public Member update(Member input) throws Exception;
+
+    /**
      * 회원 탈퇴를 처리한다.
      * 입력된 비밀번호가 일치하는 경우에만 탈퇴 처리를 수행하며,
      * is_out 값을 'Y'로 변경하고 edit_date를 현재 시간으로 설정한다.
@@ -72,22 +82,12 @@ public interface MemberService {
     public void out(Member input) throws Exception;
 
     /**
-     * 탈퇴한 회원들의 정보를 조회한다.
-     * is_out 값이 'Y'인 회원들 중에서 탈퇴일시가 현재 시각을 기준으로 1분 이전인 회원들의 정보를 조회한다.
+     * 탈퇴한 회원들의 프로필 사진 목록을 조회하고 탈퇴 회원을 일괄 삭제한다.
+     * is_out 값이 'Y'인 회원들 중에서 탈퇴일시가 현재 시각을 기준으로 1분 이전인 회원들의 정보에 대해 처리한다.
      * 실제 서비스 개발시에는 3개월에 해당하는 시간을 설정하는 등 사이트 정책에 따라 달라져야 한다.
      *
      * @return List<Member> - 탈퇴한 회원들의 정보 리스트
      * @throws Exception - 예외 발생 시
      */
     public List<Member> processOutMembers() throws Exception;
-
-    /**
-     * 회원 정보를 업데이트한다.
-     * 입력된 회원 정보를 바탕으로 회원 정보를 수정하고, 수정된 회원 정보를 반환한다.
-     *
-     * @param input - 회원 정보
-     * @return Member - 수정된 회원 정보
-     * @throws Exception - 예외 발생 시
-     */
-    public Member update(Member input) throws Exception;
 }

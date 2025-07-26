@@ -158,6 +158,7 @@ public class FileHelper {
      * @throws NullPointerException 업로드 된 파일이 없는 경우
      * @throws Exception            파일 저장에 실패한 경우
      */
+    @SuppressWarnings("null")
     public UploadItem saveMultipartFile(MultipartFile multipartFile)
             throws NullPointerException, Exception {
 
@@ -389,5 +390,37 @@ public class FileHelper {
         // 파일 URL 생성
         String fileUrl = String.format("%s%s", uploadUrl, filePath);
         return fileUrl;
+    }
+
+    /**
+     * 업로드 된 파일을 삭제하는 메서드
+     * @param filePath - 삭제할 파일의 경로
+     */
+    public void deleteFile(String filePath) throws Exception {
+        // 원본 파일의 경로 만들기
+        File file = new File(uploadDir, filePath);
+
+        // 원본 파일이 존재하면 삭제
+        if (file.exists()) {
+            file.delete();
+            log.debug("파일 삭제 성공: {}", filePath);
+        }
+
+        // 썸네일 이미지의 경로 문자열 만들기
+        String dirPath = file.getParent();
+        String fileName = file.getName();
+        int p = fileName.lastIndexOf(".");
+        String name = fileName.substring(0, p);
+        String ext = fileName.substring(p + 1);
+        String thumbName = name + "_" + thumbnailWidth + "x" + thumbnailHeight + "." + ext;
+
+        File thumbFile = new File(dirPath, thumbName);
+        String thumbPath = thumbFile.getAbsolutePath();
+
+        // 썸네일 이미지가 존재하면 삭제
+        if (thumbFile.exists()) {
+            thumbFile.delete();
+            log.debug("썸네일 삭제 성공: {}", thumbPath);
+        }
     }
 }

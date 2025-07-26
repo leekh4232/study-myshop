@@ -127,9 +127,9 @@ public interface MemberMapper {
             + "addr1 = #{addr1},"
             + "addr2 = #{addr2},"
             + "photo = #{photo},"
-            + "edit_date = NOW()"
+            + "edit_date = NOW() "
             // 세션의 일련번호와 입력한 비밀번호가 일치할 경우만 수정
-            + "WHERE id = #{id} AND user_pw = MD5(#{userPw})"
+            + "WHERE id = #{id} AND user_pw = MD5(#{userPw}) AND is_out = 'N'"
             + "</script>")
     public int update(Member input);
 

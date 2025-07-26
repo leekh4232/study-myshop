@@ -69,16 +69,6 @@ public class AccountController {
     }
 
     /**
-     * 회원 탈퇴 페이지
-     *
-     * @return 회원 탈퇴 페이지의 뷰 이름
-     */
-    @GetMapping("/account/out")
-    public String out() {
-        return "account/out";
-    }
-
-    /**
      * 회원 정보 수정 페이지
      *
      * @return 회원 정보 수정 페이지의 뷰 이름
@@ -86,5 +76,15 @@ public class AccountController {
     @GetMapping("/account/edit")
     public String edit() {
         return "account/edit";
+    }
+
+    /**
+     * 회원 탈퇴 페이지
+     *
+     * @return 회원 탈퇴 페이지의 뷰 이름
+     */
+    @GetMapping("/account/out")
+    public String out() {
+        return "account/out";
     }
 }

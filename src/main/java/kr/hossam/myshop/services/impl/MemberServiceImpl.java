@@ -88,8 +88,17 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member update(Member input) throws Exception {
+        // WHERE절 조건에 맞는 데이터가 없는 경우 --> 비밀번호 잘못됨
+        if (memberMapper.update(input) == 0) {
+            throw new Exception("현재 비밀번호를 확인하세요.");
+        }
+
+        return memberMapper.selectItem(input);
+    }
+
+    @Override
     public void out(Member input) throws Exception {
-        // 탈퇴 처리 결과 확인
         if (memberMapper.out(input) == 0) {
             throw new ServiceNoResultException("회원 탈퇴에 실패했습니다. 비밀번호가 잘못되었거나 가입되어 있지 않은 회원 입니다.");
         }
@@ -106,15 +115,5 @@ public class MemberServiceImpl implements MemberService {
         memberMapper.deleteOutMembers();
 
         return output;
-    }
-
-    @Override
-    public Member update(Member input) throws Exception {
-        // WHERE절 조건에 맞는 데이터가 없는 경우 --> 비밀번호 잘못됨
-        if (memberMapper.update(input) == 0) {
-            throw new Exception("현재 비밀번호를 확인하세요.");
-        }
-
-        return memberMapper.selectItem(input);
     }
 }

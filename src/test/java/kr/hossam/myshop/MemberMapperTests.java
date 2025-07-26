@@ -3,6 +3,7 @@ package kr.hossam.myshop;
 import kr.hossam.myshop.mappers.MemberMapper;
 import kr.hossam.myshop.models.Member;
 import lombok.extern.slf4j.Slf4j;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -104,17 +105,6 @@ public class MemberMapperTests {
     }
 
     @Test
-    void outMember() {
-        // 테스트용 회원 정보 생성
-        Member input = new Member();
-        input.setId(5);             // 존재하는 회원의 ID로 설정
-        input.setUserPw("1234");    // 탈퇴할 때 사용할 비밀번호
-
-        int output = memberMapper.out(input);
-        log.debug("output:{}", output);
-    }
-
-    @Test
     void editMember() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
@@ -135,6 +125,29 @@ public class MemberMapperTests {
 
         // editMember 실행
         int output = memberMapper.update(input);
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void outMember() {
+        // 테스트용 회원 정보 생성
+        Member input = new Member();
+        input.setId(1);             // 존재하는 회원의 ID로 설정
+        input.setUserPw("1234");    // 탈퇴할 때 사용할 비밀번호
+
+        int output = memberMapper.out(input);
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void selectOutMemberPhoto() {
+        List<Member> output = memberMapper.selectOutMembersPhoto();
+        log.debug("output:{}", output);
+    }
+
+    @Test
+    void deleteOutMember() {
+        int output = memberMapper.deleteOutMembers();
         log.debug("output:{}", output);
     }
 }
