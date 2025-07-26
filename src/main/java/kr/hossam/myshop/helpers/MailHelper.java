@@ -23,19 +23,19 @@ public class MailHelper {
      *
      * --> import org.springframework.mail.javamail.JavaMailSender;
      */
-    private final JavaMailSender javaMailSender = null;
+    private final JavaMailSender javaMailSender;
 
     /**
      * 보내는 사람의 이름과 이메일 주소 (환경설정 파일에서 읽어옴)
      */
     @Value("${mailhelper.sender.name}")
-    private String senderName = null;
+    private String senderName;
 
     /**
      * 보내는 사람의 이메일 주소 (환경설정 파일에서 읽어옴)
      */
     @Value("${mailhelper.sender.email}")
-    private String senderEmail = null;
+    private String senderEmail;
 
     /**
      * 메일을 발송한다.

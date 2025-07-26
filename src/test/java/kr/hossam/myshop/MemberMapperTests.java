@@ -59,8 +59,8 @@ public class MemberMapperTests {
     void login() {
         // 테스트용 로그인 정보 생성
         Member input = new Member();
-        input.setUserId("testuser");
-        input.setUserPw("testpw123");
+        input.setUserId("hellotest1");
+        input.setUserPw("1234");
 
         // login 실행
         Member output = memberMapper.login(input);
@@ -71,7 +71,7 @@ public class MemberMapperTests {
     void updateLoginDate() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
-        input.setId(5); // 존재하는 회원의 ID로 설정
+        input.setId(1); // 존재하는 회원의 ID로 설정
 
         // updateLoginDate 실행
         int output = memberMapper.updateLoginDate(input);
@@ -82,8 +82,8 @@ public class MemberMapperTests {
     void findId() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
-        input.setUserName("테스트유저1");
-        input.setEmail("leekh4232@gmail.com");
+        input.setUserName("수정된유저");
+        input.setEmail("leekh4232@yonsei.ac.kr");
 
         // findId 실행
         Member output = memberMapper.findId(input);
@@ -94,8 +94,8 @@ public class MemberMapperTests {
     void resetPassword() {
         // 테스트용 회원 정보 생성
         Member input = new Member();
-        input.setUserId("testuser1");
-        input.setEmail("leekh4232@gmail.com");
+        input.setUserId("hellotest1");
+        input.setEmail("leekh4232@yonsei.ac.kr");
         input.setUserPw("1234"); // 새 비밀번호 설정
 
         // resetPassword 실행

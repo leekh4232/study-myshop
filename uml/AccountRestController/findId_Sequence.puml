@@ -12,10 +12,11 @@ participant Database
 
 Actor -> AccountRestController: POST /api/account/find_id(userName: String, email: String)
 activate AccountRestController
-note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> RegexHelper: 유효성 검사
 activate RegexHelper
+note right of RegexHelper: 발생 가능한 예외:\n- StringFormatException\n  (이름 미입력, 이메일 미입력,\n   잘못된 이메일 형식)
+RegexHelper -->> MyRestExceptionHandler: StringFormatException
 RegexHelper --> AccountRestController
 deactivate RegexHelper
 
@@ -25,18 +26,25 @@ MemberService -> MemberMapper: findId(input: Member)
 activate MemberMapper
 MemberMapper -> Database: SELECT
 activate Database
-note right: 이름, 이메일로 아이디 조회
+note right: 아이디 조회
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: Member
 deactivate Database
-MemberMapper --> MemberService: Member
+MemberMapper --> MemberService: Member output
 deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- Exception\n  (조회된 아이디가 없습니다)
+MemberService -->> MyRestExceptionHandler: Exception
 MemberService --> AccountRestController: Member
 deactivate MemberService
 
-AccountRestController --> MyApiResponseAdvice: Map<String, Object>(user_id)
+AccountRestController --> MyApiResponseAdvice: Map<String, Object>
 deactivate AccountRestController
 activate MyApiResponseAdvice
-MyApiResponseAdvice --> Actor: JSON 응답 (아이디 반환)
+MyApiResponseAdvice --> Actor: JSON 응답 (성공)
 deactivate MyApiResponseAdvice
+
+note over MyRestExceptionHandler: 모든 예외를 포착하여\nJSON 에러 응답으로 변환
+MyRestExceptionHandler --> Actor: JSON 에러 응답
 
 @enduml

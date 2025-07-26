@@ -12,7 +12,7 @@ participant Database
 
 Actor -> AccountRestController: GET /api/account/id_unique_check?user_id={userId}
 activate AccountRestController
-note right: @SessionCheckHelper(enable = false)
+' note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> RegexHelper: 유효성 검사
 activate RegexHelper

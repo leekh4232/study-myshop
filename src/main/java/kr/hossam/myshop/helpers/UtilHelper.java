@@ -10,7 +10,16 @@ public class UtilHelper {
             throw new IllegalArgumentException("길이는 1자리 이상이어야 합니다.");
         }
 
+        // 랜덤 문자열을 생성하기 위한 문자 집합
+        // --> a~z, A~Z, 0~9의 모든 문자
         final String DATA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        // SecureRandom은 보안적으로 안전한 난수 생성기이다.
+        // 이 클래스는 암호학적으로 안전한 난수를 생성하는 데 사용된다.
+        // SecureRandom은 Java에서 제공하는 기본 난수 생성기보다 더 강력한
+        // 난수 생성 알고리즘을 사용하여 예측 불가능한 난수를 생성한다.
+        // 따라서, 보안이 중요한 경우 SecureRandom을 사용하는 것이 좋다.
+        // --> import java.security.SecureRandom;
         SecureRandom random = new SecureRandom();
 
         StringBuilder sb = new StringBuilder(length);

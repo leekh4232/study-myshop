@@ -81,7 +81,7 @@ class MemberServiceTests {
     void testLogin() {
         // 테스트용 로그인 정보 생성
         Member input = new Member();
-        input.setUserId("helloworld");
+        input.setUserId("hellotest1");
         input.setUserPw("1234");
 
         Member output = null;
@@ -121,8 +121,8 @@ class MemberServiceTests {
 
         // 테스트용 비밀번호 재설정 정보 생성
         Member input = new Member();
-        input.setUserId("testuser1");
-        input.setEmail("leekh4232@gmail.com");
+        input.setUserId("hellotest1");
+        input.setEmail("leekh4232@yonsei.ac.kr");
         input.setUserPw(newPassword);
 
         try {

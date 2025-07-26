@@ -14,11 +14,10 @@ participant Database
 
 Actor -> AccountRestController: PUT /api/account/reset_pw(userId: String, email: String)
 activate AccountRestController
-note right: @SessionCheckHelper(enable = false)
 
 AccountRestController -> UtilHelper: getRandomString(length: int)
 activate UtilHelper
-UtilHelper --> AccountRestController: String(새 비밀번호)
+UtilHelper --> AccountRestController: String newPassword
 deactivate UtilHelper
 
 AccountRestController -> MemberService: resetPw(input: Member)
@@ -28,20 +27,28 @@ activate MemberMapper
 MemberMapper -> Database: UPDATE
 activate Database
 note right: 비밀번호 재설정
+note right of Database: 발생 가능한 예외:\n- SQLException\n  (데이터베이스 연결 오류)
+Database -->> MyRestExceptionHandler: SQLException
 Database --> MemberMapper: int
 deactivate Database
 MemberMapper --> MemberService: int
 deactivate MemberMapper
+note right of MemberService: 발생 가능한 예외:\n- Exception\n  (아이디와 이메일을 확인하세요)
+MemberService -->> MyRestExceptionHandler: Exception
 MemberService --> AccountRestController
 deactivate MemberService
 
 AccountRestController -> FileHelper: readString(mailTemplatePath: String)
 activate FileHelper
-FileHelper --> AccountRestController: String(메일 템플릿)
+note right of FileHelper: 발생 가능한 예외:\n- IOException\n  (파일 읽기 실패)
+FileHelper -->> MyRestExceptionHandler: IOException
+FileHelper --> AccountRestController: String template
 deactivate FileHelper
 
 AccountRestController -> MailHelper: sendMail(email: String, subject: String, template: String)
 activate MailHelper
+note right of MailHelper: 발생 가능한 예외:\n- MessagingException\n  (이메일 발송 실패)
+MailHelper -->> MyRestExceptionHandler: MessagingException
 MailHelper --> AccountRestController
 deactivate MailHelper
 
@@ -50,5 +57,8 @@ deactivate AccountRestController
 activate MyApiResponseAdvice
 MyApiResponseAdvice --> Actor: JSON 응답 (성공)
 deactivate MyApiResponseAdvice
+
+note over MyRestExceptionHandler: 모든 예외를 포착하여\nJSON 에러 응답으로 변환
+MyRestExceptionHandler --> Actor: JSON 에러 응답
 
 @enduml

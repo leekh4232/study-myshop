@@ -8,8 +8,7 @@
 
 <body>
     <!-- 로딩바 -->
-    <img th:src="@{/assets/img/loading.gif}" id="loader"
-        style="width: 100px; height: 100px; position: fixed; z-index: 1000; left: 50%; top: 50%; transform: translate(-50%, -50%); display: none" />
+    <img th:src="@{/assets/img/loading.gif}" id="loader" />
 
     <div class="account-container">
         <h2 class="page-title">로그인</h2>
@@ -40,15 +39,15 @@
                 regexHelper.value('#user_pw', '비밀번호를 입력하세요.');
             } catch (err) {
                 alert(err.message);
-                setTimeout(() => err.element.focus(), 500);
-                return false;
+                err.element.focus()
+                return;
             }
 
             try {
                 await fetchHelper.post('[[@{/api/account/login}]]', new FormData(e.currentTarget));
             } catch (err) {
                 alert(err.message);
-                setTimeout(() => err.element.focus(), 500);
+                err.element.focus()
                 return false;
             }
 
