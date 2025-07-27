@@ -19,6 +19,16 @@
             "projectName": "myschop-study-myshop",
             "args": "",
             "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MyshopApplication<study-myshop>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "kr.hossam.myshop.MyshopApplication",
+            "projectName": "study-myshop",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
         }
     ]
 }

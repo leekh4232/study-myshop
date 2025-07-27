@@ -36,19 +36,18 @@
             try {
                 regexHelper.value("#user_pw", "비밀번호를 입력하세요");
             } catch (e) {
-                await utilHelper.alertDanger(e.message);
-                setTimeout(() => e.element.focus(), 300);
+                alert(e.message);
+                e.element.focus();
                 return;
             }
 
-            const result = confirm("탈퇴확인", "정말 탈퇴하시겠습니까? 탈퇴 후에는 복구할 수 없습니다.");
+            const result = confirm("정말 탈퇴하시겠습니까? 탈퇴 후에는 복구할 수 없습니다.");
 
             if (result) {
                 try {
                     await fetchHelper.delete("[[@{/api/account/out}]]", new FormData(current));
                 } catch (e) {
-                    await utilHelper.alertDanger(e.message);
-                    console.error(err);
+                    alert(e.message);
                     return;
                 }
 

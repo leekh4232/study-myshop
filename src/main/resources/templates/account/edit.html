@@ -48,9 +48,9 @@
                     placeholder="이메일" />
                 <button type="button" class="inline-btn" id="email_unique_check">중복 검사</button>
                 <!--
-                        기존 이메일은 중복검사가 필요 없으므로, 중복검사가 완료된 상태로 시작 : Y
-                        이메일 입력값이 변경되면 JS에 의해서 값이 N으로 변경되므로 중복검사가 필요하게 된다.
-                     -->
+                    기존 이메일은 중복검사가 필요 없으므로, 중복검사가 완료된 상태로 시작 : Y
+                    이메일 입력값이 변경되면 JS에 의해서 값이 N으로 변경되므로 중복검사가 필요하게 된다.
+                -->
                 <input type="hidden" name="email_check" id="email_check" value="Y" />
             </div>
 
@@ -163,8 +163,7 @@
                 regexHelper.value("#email", "이메일을 입력하세요");
             } catch (e) {
                 alert(e.message);
-                // 팝업 애니메이션이 종료되는 동안 약간의 딜레이 후에 포커스가 이동해야 한다.
-                setTimeout(() => e.element.focus(), 1);
+                e.element.focus();
                 return;
             }
 
@@ -252,7 +251,7 @@
             const emailCheck = document.querySelector("#email_check").value;
 
             if (emailCheck === "N") {
-                await utilHelper.alertWarning("이메일 중복 검사를 진행해주세요.");
+                alert("이메일 중복 검사를 진행해주세요.");
                 return;
             }
 
