@@ -45,7 +45,7 @@ public class AccountScheduler {
     private final MemberService memberService;
 
     //@Scheduled(cron = "0 0 4 * * ?") // 매일 오전 4시에 자동 실행
-    //@Scheduled(cron = "15 * * * * ?") // 매 분마다 15초에 실행
+    //@Scheduled(cron = "15/45 * * * * ?") // 매 분마다 15초에 실행
     @Scheduled(cron = "0 0/30 * * * ?") // 30분마다 실행(0분,30분)
     public void processOutMembers() throws Exception {
         log.debug("탈퇴 회원 정리 시작");
