@@ -1,5 +1,5 @@
 @startuml
-skinparam dpi 200
+skinparam dpi 300
 
 participant "Spring Scheduler" as Scheduler
 participant AccountScheduler
