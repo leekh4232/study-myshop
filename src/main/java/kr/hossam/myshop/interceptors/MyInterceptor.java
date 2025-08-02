@@ -137,7 +137,7 @@ public class MyInterceptor implements HandlerInterceptor {
                             throw new AccessDeniedException("로그인 중에는 접근할 수 없습니다.");
                         } else {
                             response.setStatus(403);
-                            response.sendRedirect(request.getContextPath() + "/account/login");
+                            response.sendRedirect(request.getContextPath() + "/account");
                         }
                         return false;
                     }

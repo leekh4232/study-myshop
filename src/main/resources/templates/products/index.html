@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ko" translate="no" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+</head>
+
+<body>
+    <ul>
+        <li th:each="c : ${categories}">
+            <span th:text="${c.name}"></span>
+        </li>
+    </ul>
+</body>
+
+</html>
