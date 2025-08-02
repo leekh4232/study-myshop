@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
@@ -129,6 +128,7 @@ public class AccountRestController {
      * @throws Exception 입력값 유효성 검사 실패 또는 회원 가입 처리 중 예외 발생 시
      */
     @PostMapping("/api/account/join")
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> join(
             @RequestParam("user_id") String userId,
             @RequestParam("user_pw") String userPw,
@@ -208,6 +208,7 @@ public class AccountRestController {
      * @throws Exception 입력값 유효성 검사 실패 또는 로그인 처리 중 예외 발생 시
      */
     @PostMapping("/api/account/login")
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> login(
             HttpServletRequest request,
             @RequestParam("user_id") String userId,
@@ -241,6 +242,7 @@ public class AccountRestController {
      * @return 로그아웃 결과에 대한 JSON 응답
      */
     @GetMapping("/api/account/logout")
+    @SessionCheckHelper(enable = true) // <-- 로그인된 상태에서만 접근 가능함
     public Map<String, Object> logout(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
@@ -258,6 +260,7 @@ public class AccountRestController {
      * @throws Exception 입력값 유효성 검사 실패 또는 아이디 찾기 처리 중 예외 발생 시
      */
     @PostMapping("/api/account/find_id")
+    @SessionCheckHelper(enable = false) // <-- 로그인되지 않은 상태에서만 접근 가능함
     public Map<String, Object> findId(
             @RequestParam("user_name") String userName,
             @RequestParam("email") String email) throws Exception {
@@ -351,6 +354,7 @@ public class AccountRestController {
      * @throws Exception            // 입력값 유효성 검사 실패 또는 회원 정보 수정 처리 중 예외 발생 시
      */
     @PutMapping("/api/account/edit")
+    @SessionCheckHelper(enable = true) // <-- 로그인된 상태에서만 접근 가능함
     public Map<String, Object> edit(
             HttpServletRequest request,                                     // 세션 갱신용
             @SessionAttribute("memberInfo") Member memberInfo,              // 현재 세션 정보 확인용
@@ -482,6 +486,7 @@ public class AccountRestController {
      * @throws Exception    탈퇴 처리 중 예외 발생 시
      */
     @DeleteMapping("/api/account/out")
+    @SessionCheckHelper(enable = true) // <-- 로그인된 상태에서만 접근 가능함
     public Map<String, Object> out(
         HttpServletRequest request,
         @SessionAttribute("memberInfo") Member memberInfo,

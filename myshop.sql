@@ -141,7 +141,7 @@ CREATE TABLE `members` (
   `reg_date` datetime NOT NULL COMMENT '등록일시',
   `edit_date` datetime NOT NULL COMMENT '변경일시',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci COMMENT='회원';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci COMMENT='회원';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

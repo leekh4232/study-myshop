@@ -14,7 +14,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import ua_parser.Client;
 import ua_parser.Parser;
-
+import java.nio.file.AccessDeniedException;
 import java.util.Map;
 
 @Slf4j
@@ -81,7 +81,7 @@ public class MyInterceptor implements HandlerInterceptor {
         // 획득한 정보를 로그로 표시한다.
         log.info(String.format("[%s] %s", methodName, url));
 
-        /** 3) 클라이언트가 전달한 모든 파라미터 확인하기 */
+        /** 4) 클라이언트가 전달한 모든 파라미터 확인하기 */
         Map<String, String[]> params = request.getParameterMap();
 
         for (String key : params.keySet()) {
@@ -89,7 +89,7 @@ public class MyInterceptor implements HandlerInterceptor {
             log.info(String.format("(param) <-- %s = %s", key, String.join(",", value)));
         }
 
-        /** 4) 클라이언트가 머물렀던 이전 페이지 확인하기 */
+        /** 5) 클라이언트가 머물렀던 이전 페이지 확인하기 */
         String referer = request.getHeader("referer");
 
         // 이전에 머물렀던 페이지가 존재한다면?
@@ -98,7 +98,7 @@ public class MyInterceptor implements HandlerInterceptor {
             log.info(String.format("- REFERER : time=%d, url=%s", startTime - endTime, referer));
         }
 
-        // 로그인 여부에 따른 페이지 접근 제어
+        /** 6) 로그인 여부에 따른 페이지 접근 제어 */
         // @SessionCheckHelper 어노테이션이 붙은 메서드에 대해서만 세션 체크를 수행한다.
         if (handler instanceof HandlerMethod handlerMethod) {
             // 세션 검사용 어노테이션을 가져온다.
@@ -123,10 +123,10 @@ public class MyInterceptor implements HandlerInterceptor {
                 if (enable) {           // 로그인 중에만 접근 가능한 페이지 검사
                     if (!isLoggedIn) {  // 로그인을 하지 않은 상태라면?
                         if (isRestful) {
-                            //restHelper.badRequest("로그인이 필요합니다.");
+                            throw new AccessDeniedException("로그인이 필요합니다.");
                         } else {
-                            //webHelper.badRequest("로그인이 필요합니다.");
-                            //webHelper.redirect(403, "/account/login", "로그인이 필요합니다.");
+                            response.setStatus(403);
+                            response.sendRedirect(request.getContextPath() + "/account/login");
                         }
 
                         return false;
@@ -134,9 +134,10 @@ public class MyInterceptor implements HandlerInterceptor {
                 } else {                // 로그인하지 않은 상태에서만 접근 가능한 페이지 검사
                     if (isLoggedIn) {   // 로그인을 한 상태라면?
                         if (isRestful) {
-                            //restHelper.badRequest("로그인중에는 접근할 수 없습니다.");
+                            throw new AccessDeniedException("로그인 중에는 접근할 수 없습니다.");
                         } else {
-                            //webHelper.badRequest("로그인 중에는 접근할 수 없습니다.");
+                            response.setStatus(403);
+                            response.sendRedirect(request.getContextPath() + "/account/login");
                         }
                         return false;
                     }
