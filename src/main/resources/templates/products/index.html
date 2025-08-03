@@ -1,19 +1,46 @@
+<!-- /src/main/resources/templates/products/index.html -->
 <!DOCTYPE html>
 <html lang="ko" translate="no" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="google" content="notranslate" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>index</title>
+    <th:block th:replace="~{_fragments/_head :: my-head('상품목록')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/product.css}" />
 </head>
 
 <body>
-    <ul>
-        <li th:each="c : ${categories}">
-            <span th:text="${c.name}"></span>
-        </li>
-    </ul>
+    <th:block th:replace="~{_fragments/header}" />
+
+    <div class="container">
+
+        <th:block th:replace="~{_fragments/sidebar}" />
+
+        <div class="product-grid">
+
+            <h1 class="product-category-title">All Products</h1>
+
+            <!-- 상품목록 시작 -->
+            <div class="product-card" th:each="p : ${products}">
+                <span class="discount-badge" th:if="${p.discount > 0}">
+                    <span th:text="${p.discount}" />% OFF
+                </span>
+                <img th:src="${@fileHelper.getFileUrl(p.imageUrl)}" th:alt="${p.name}">
+                <h4 th:text="${p.name}" />
+                <p class="summary" th:text="${p.summary}" />
+                <p th:if="${p.discount > 0}">
+                    <del th:text="|₩${p.price}|" />
+                    <strong style="color:#e60023;" th:text="|₩${p.price - (p.price * p.discount / 100)}|" />
+                </p>
+                <p th:unless="${p.discount > 0}">
+                    <strong th:text="|₩${p.price}|" />
+                </p>
+            </div>
+            <!--// 상품목록 끝 -->
+
+        </div>
+    </div>
+
+
+    <th:block th:replace="~{_fragments/footer}" />
 </body>
 
 </html>

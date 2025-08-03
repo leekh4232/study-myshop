@@ -10,5 +10,5 @@ public interface CategoryService {
      *
      * @return  List<Category> - 카테고리 목록
      */
-    public List<Category> getAllCategories();
+    public List<Category> getAllCategories() throws Exception;
 }

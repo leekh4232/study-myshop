@@ -1,0 +1,14 @@
+<!-- /resources/templates/_fragments/sidebar.html -->
+<div id="category-list-container">
+    <ul id="category-list">
+        <li th:each="c : ${categories}" th:if="${c != null}">
+            <span th:text="${c.name}"></span>
+
+            <ul th:if="${!#lists.isEmpty(c.subCategories)}" class="sub-category-list">
+                <li th:each="s : ${c.subCategories}">
+                    <span th:text="${s.name}"></span>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
