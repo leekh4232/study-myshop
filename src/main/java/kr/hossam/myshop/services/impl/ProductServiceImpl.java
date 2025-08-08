@@ -21,8 +21,15 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProducts(Product input) throws Exception {
-        // 상품 목록을 조회하기 위해 ProductMapper의 getProducts 메서드를 호출
-        List<Product> products = productMapper.getProducts(input);
+        List<Product> products = null;
+
+        if (input != null && input.getCategoryId() > 0) {
+            // 카테고리 ID가 설정되어 있다면 해당 카테고리에 속한 상품 목록 조회
+            products = productMapper.getProductsByCategory(input);
+        } else {
+            // 카테고리 ID가 설정되어 있지 않다면 전체 상품 목록 조회
+            products = productMapper.getProducts(input);
+        }
 
         // 조회된 상품 목록 반환
         return products;

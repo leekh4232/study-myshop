@@ -34,4 +34,24 @@ public class ProductMapperTests {
                      product.getImageUrl());
         }
     }
+
+    @Test
+    void testGetProductsByCategory() {
+        // ProductMapper의 getProductsByCategory 메서드를 호출하여 특정 카테고리의 상품 목록을 조회
+        Product input = new Product();
+        input.setCategoryId(10); // 예시로 카테고리 ID 10을 설정
+
+        List<Product> products = productMapper.getProductsByCategory(input);
+
+        // 조회된 상품 목록을 로그로 출력
+        for (Product product : products) {
+            log.info("Product ID: {}, Name: {}, Price: {}, Discount: {}, Summary: {}, Image URL: {}",
+                     product.getId(),
+                     product.getName(),
+                     product.getPrice(),
+                     product.getDiscount(),
+                     product.getSummary(),
+                     product.getImageUrl());
+        }
+    }
 }

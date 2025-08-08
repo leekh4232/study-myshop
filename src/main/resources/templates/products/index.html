@@ -16,7 +16,8 @@
 
         <div class="product-grid">
 
-            <h1 class="product-category-title">All Products</h1>
+            <!-- <h1 class="product-category-title">All Products</h1> -->
+            <h1 class="product-category-title" th:text="${categoryName}" />
 
             <!-- 상품목록 시작 -->
             <div class="product-card" th:each="p : ${products}">

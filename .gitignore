@@ -1,6 +1,6 @@
 ### default ###
 upload/
-files/
+_files/
 logs/
 *.docx
 *.pptx

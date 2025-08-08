@@ -19,4 +19,8 @@ public class Product {
     private String content;
     private String regDate;
     private String editDate;
+
+    // 카테고리 테이블에 대한 JOIN을 위한 필드
+    private int categoryId;
+    private String categoryName;
 }
