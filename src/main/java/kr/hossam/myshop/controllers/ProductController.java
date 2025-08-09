@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.util.List;
 
@@ -88,5 +89,47 @@ public class ProductController {
 
         // 사용할 View의 경로 반환
         return "products/index"; // templates/products/index.html
+    }
+
+    @GetMapping({"/products/detail/{id}", "/products/detail/{id}/{categoryId}"})
+    public String productDetail(
+            Model model,
+            @PathVariable(value="id", required = true) int id,
+            @PathVariable(value="categoryId", required = false) Integer categoryId) throws Exception {
+
+        // 카테고리 목록을 가져옴
+        List<Category> categories = categoryService.getAllCategories();
+
+        // Path 파라미터가 전달되었다면 (카테고리가 선택되었다면) 카테고리 이름 찾기
+        String categoryName = "ALL PRODUCTS";
+
+        if (categoryId != null && categoryId > 0) {
+            for (Category c : categories) {
+                if (c.getId() == categoryId) {
+                    categoryName = c.getName();
+                    break;
+                }
+            }
+        }
+
+        // 상품 상세 정보 조회
+        Product input = new Product();
+        input.setId(id);
+        Product product = productService.getProductDetail(input);
+
+        // 상품이 존재하지 않으면 404 에러
+        if (product == null) {
+            throw new NoHandlerFoundException("GET", "/products/detail/" + id + "/" + categoryId, null);
+        }
+
+        // View에 데이터 전달
+        model.addAttribute("categoryId", categoryId);       // 사용자가 선택한 카테고리 ID
+        model.addAttribute("categoryName", categoryName);   // 사용자가 선택한 카테고리 이름
+        model.addAttribute("categories", categories);       // 카테고리 전체 목록 (사이드바 메뉴 구성용)
+        model.addAttribute("productId", id);                // 상품 ID
+        model.addAttribute("product", product);             // 상품 상세 정보
+
+        // 사용할 View의 경로 반환
+        return "products/detail"; // templates/products/detail.html
     }
 }

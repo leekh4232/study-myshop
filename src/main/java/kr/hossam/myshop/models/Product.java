@@ -7,6 +7,9 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+import java.util.Map;
+
 @Data
 public class Product {
     private int id;
@@ -24,7 +27,9 @@ public class Product {
 
     // 카테고리 테이블에 대한 JOIN을 위한 필드
     private int categoryId;
-    private String categoryName;
+
+    // 상품에 속한 옵션 목록을 위한 필드
+    private Map<String, List<ProductOption>> options;
 
     /**
      * 한 페이지에 표시될 목록 수

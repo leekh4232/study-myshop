@@ -1,0 +1,37 @@
+<!-- /src/main/resources/templates/products/detail.html -->
+<!DOCTYPE html>
+<html lang="ko" translate="no" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="~{_fragments/_head :: my-head('상품목록')}" />
+    <link rel="stylesheet" th:href="@{/assets/css/product.css}" />
+</head>
+
+<body>
+    <th:block th:replace="~{_fragments/header}" />
+
+    <div class="container">
+
+        <th:block th:replace="~{_fragments/sidebar}" />
+
+        <div class="product-detail">
+            <div class="product-header">
+                <h1 class="product-category-title" th:text="${categoryName}" />
+                <form method="get" class="search-form" th:action="@{/products/{categoryId}(categoryId=${categoryId})}">
+                    <div class="search-input-container">
+                        <i class="search-icon fa fa-search"></i>
+                        <input type="text" name="keyword" placeholder="검색어 입력" th:value="${keyword}" />
+                    </div>
+                    <button type="submit">검색</button>
+                </form>
+            </div>
+
+            <!-- 상품 상세 정보 -->
+            <div class="product-info">
+                <pre th:text="${product.toString()}" />
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

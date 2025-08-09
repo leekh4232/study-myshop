@@ -33,4 +33,20 @@ public class ProductServivceTests {
                      product.getImageUrl());
         }
     }
+
+    @Test
+    void testGetProductDetail() throws Exception {
+        Product input = new Product();
+        input.setId(11023); // 예시로 ID가 11023인 상품의 상세 정보를 조회
+
+        Product productDetail = productService.getProductDetail(input);
+
+        log.info("Product Detail: ID: {}, Name: {}, Price: {}, Discount: {}, Image URL: {}, options: {}",
+                 productDetail.getId(),
+                 productDetail.getName(),
+                 productDetail.getPrice(),
+                 productDetail.getDiscount(),
+                 productDetail.getImageUrl(),
+                 productDetail.getOptions());
+    }
 }

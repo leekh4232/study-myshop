@@ -19,7 +19,7 @@
             <!-- <h1 class="product-category-title">All Products</h1> -->
             <div class="product-header">
                 <h1 class="product-category-title" th:text="${categoryName}" />
-                <form method="get" class="search-form">
+                <form method="get" class="search-form" th:action="@{/products/{categoryId}(categoryId=${categoryId})}">
                     <div class="search-input-container">
                         <i class="search-icon fa fa-search"></i>
                         <input type="text" name="keyword" placeholder="검색어 입력" th:value="${keyword}" />
@@ -29,7 +29,8 @@
             </div>
 
             <!-- 상품 목록 시작 -->
-            <div class="product-card" th:each="p : ${products}">
+            <a class="product-card" th:each="p : ${products}"
+               th:href="@{/products/detail/{productId}/{categoryId}(productId=${p.id}, categoryId=${categoryId})}">
                 <span class="discount-badge" th:if="${p.discount > 0}">
                     <span th:text="${p.discount}" />% OFF
                 </span>
@@ -43,7 +44,7 @@
                 <p th:unless="${p.discount > 0}">
                     <strong th:text="|₩${p.price}|" />
                 </p>
-            </div>
+            </a>
             <!--// 상품 목록 끝 -->
 
             <!-- 페이지 번호 -->

@@ -173,6 +173,7 @@ header {
 }
 
 .product-card {
+    display: block;
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 6px;
