@@ -1,3 +1,6 @@
+/**
+ * /src/main/java/kr/hossam/myshop/helpers/PageHelper.java
+ */
 package kr.hossam.myshop.helpers;
 
 import lombok.Data;
@@ -5,8 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 페이지 네비게이션 처리를 위한 유틸리티 클래스
- * 이 클래스는 싱글톤으로 생성되어서는 안된다.
- * --> new 키워드로 생성할 수 있도록 기본 생성자를 만들어야 한다.
+ * 이 클래스의 객체는 싱글톤으로 생성되면 안되기 때문에 Spring의 DI(객체의존성주입)을 사용하지 않는다.
  */
 @Data
 @Slf4j

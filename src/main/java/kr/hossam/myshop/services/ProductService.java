@@ -16,4 +16,12 @@ public interface ProductService {
      * @throws Exception - 예외 발생 시
      */
     public List<Product> getProducts(Product input) throws Exception;
+
+    /**
+     * 상품 개수를 조회한다.
+     *
+     * @return int - 상품 개수
+     * @throws Exception - 예외 발생 시
+     */
+    public int getProductCount(Product input) throws Exception;
 }

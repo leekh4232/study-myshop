@@ -1,12 +1,12 @@
+/**
+ * /src/main/java/kr/hossam/myshop/MyWebConfig.java
+ */
 package kr.hossam.myshop;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 import kr.hossam.myshop.interceptors.MyInterceptor;
 
@@ -24,6 +24,11 @@ public class MyWebConfig implements WebMvcConfigurer {
     /** 업로드 된 파일이 노출될 URL 경로 (application.properties로부터 읽어옴) */
     @Value("${upload.url}")
     private String uploadUrl;
+
+    @Override
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        configurer.setUseTrailingSlashMatch(true);
+    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

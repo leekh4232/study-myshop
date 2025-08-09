@@ -54,4 +54,26 @@ public class ProductMapperTests {
                      product.getImageUrl());
         }
     }
+
+    @Test
+    void testGetProductCount() {
+        // 전체 상품 개수를 조회하기 위해 ProductMapper의 getProductCount 메서드를 호출
+        // 입력 파라미터가 null인 경우 전체 상품 개수를 조회
+        int productCount = productMapper.getProductCount(null);
+
+        // 조회된 상품 개수를 로그로 출력
+        log.info("Total Products Count: {}", productCount);
+    }
+
+    @Test
+    void testGetProductCountByCategory() {
+        // 특정 카테고리의 상품 개수를 조회하기 위해 ProductMapper의 getProductCountByCategory 메서드를 호출
+        Product input = new Product();
+        input.setCategoryId(10); // 예시로 카테고리 ID 10을 설정
+
+        int productCount = productMapper.getProductCountByCategory(input);
+
+        // 조회된 상품 개수를 로그로 출력
+        log.info("Total Products Count in Category ID 10: {}", productCount);
+    }
 }

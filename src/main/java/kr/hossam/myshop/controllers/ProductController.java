@@ -3,6 +3,7 @@
  */
 package kr.hossam.myshop.controllers;
 
+import kr.hossam.myshop.helpers.PageHelper;
 import kr.hossam.myshop.models.Category;
 import kr.hossam.myshop.models.Product;
 import kr.hossam.myshop.services.CategoryService;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -24,9 +26,13 @@ public class ProductController {
     private final CategoryService categoryService;
     private final ProductService productService;
 
-    @GetMapping({"/", "/products", "/products/{categoryId}"})
-    public String products(Model model,
-            @PathVariable(value="categoryId", required = false) Integer categoryId) throws Exception {
+    @GetMapping({ "/", "/products", "/products/{categoryId}" })
+    public String products(
+            Model model,
+            @PathVariable(value = "categoryId", required = false) Integer categoryId,
+            @RequestParam(value = "keyword", required = false) String keyword,
+            // 페이지 구현에서 사용할 현재 페이지 번호
+            @RequestParam(value = "page", defaultValue = "1") int nowPage) throws Exception {
 
         // 카테고리 목록을 가져옴
         List<Category> categories = categoryService.getAllCategories();
@@ -50,6 +56,26 @@ public class ProductController {
         if (categoryId != null && categoryId > 0) {
             input.setCategoryId(categoryId);
         }
+
+        // 검색어가 전달되었다면 검색어를 상품이름에 대한 검색어로 설정
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            input.setName(keyword.trim());
+        }
+
+        // 페이지 구현을 위한 변수 설정
+        int listCount = 20; // 한 페이지당 표시할 목록 수
+        int groupCount = 5; // 한 그룹당 표시할 페이지 번호 수
+
+        // 상품 목록 조회 전 전체 데이터 수 조회
+        int totalCount = productService.getProductCount(input);
+
+        // 페이지 번호 계산 --> 계산결과를 로그로 출력될 것이다.
+        PageHelper pageHelper = new PageHelper(nowPage, totalCount, listCount, groupCount);
+
+        // SQL의 LIMIT절에서 사용될 값을 Beans의 static 변수에 저장
+        Product.setOffset(pageHelper.getOffset());
+        Product.setListCount(pageHelper.getListCount());
+
         List<Product> products = productService.getProducts(input);
 
         // View에 데이터 전달
@@ -57,6 +83,8 @@ public class ProductController {
         model.addAttribute("categoryName", categoryName);   // 사용자가 선택한 카테고리 이름
         model.addAttribute("categories", categories);       // 카테고리 전체 목록 (사이드바 메뉴 구성용)
         model.addAttribute("products", products);           // 상품 목록
+        model.addAttribute("keyword", keyword);             // 검색어 (검색 기능 구현을 위해)
+        model.addAttribute("pageHelper", pageHelper);       // 페이지 구현을 위한 PageHelper 객체
 
         // 사용할 View의 경로 반환
         return "products/index"; // templates/products/index.html

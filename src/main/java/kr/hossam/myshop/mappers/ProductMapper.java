@@ -12,13 +12,25 @@ import java.util.List;
 
 @Mapper
 public interface ProductMapper {
-    @Select("SELECT id, name, price, discount, summary, image_url FROM products "
+    @Select("<script>"
+            + "SELECT id, name, price, discount, summary, image_url FROM products "
+            + "<where>"
+            + "<if test='name != null and name != \"\"'> name LIKE concat('%', #{name}, '%')</if>"
+            + "</where>"
             + "ORDER BY id DESC"     // 정렬 기준: 등록 역순
-            + " LIMIT 0, 12"         // 최근 12개 상품만 조회(임시)
-            )
+            + "<if test='listCount > 0'>LIMIT #{offset}, #{listCount}</if>"
+            + "</script>")
     @Results(id = "getProducts")
     public List<Product> getProducts(Product input);
 
+    @Select("<script>"
+            + "SELECT COUNT(*) FROM products "
+            + "<where>"
+            + "<if test='name != null and name != \"\"'> name LIKE concat('%', #{name}, '%')</if>"
+            + "</where>"
+            + "</script>")
+    @Results(id = "getProductCount")
+    public int getProductCount(Product input);
 
     @Select("<script>"
             + "SELECT p.id,  p.`name`, p.price, p.discount, p.summary, p.image_url, "
@@ -29,8 +41,24 @@ public interface ProductMapper {
             + "INNER JOIN categories AS c ON pc.category_id = c.id "
             + "<where>"
             + "<if test='categoryId > 0'> AND pc.category_id = #{categoryId} </if>"
+            + "<if test='name != null and name != \"\"'> AND p.name LIKE concat('%', #{name}, '%')</if>"
             + "</where>"
+            + "ORDER BY id DESC "     // 정렬 기준: 등록 역순
+            + "<if test='listCount > 0'>LIMIT #{offset}, #{listCount}</if>"
             + "</script>")
     @Results(id = "getProductsByCategory")
     public List<Product> getProductsByCategory(Product input);
+
+    @Select("<script>"
+            + "SELECT COUNT(*) "
+            + "FROM products AS p "
+            + "INNER JOIN product_categories AS pc ON p.id = pc.product_id "
+            + "INNER JOIN categories AS c ON pc.category_id = c.id "
+            + "<where>"
+            + "<if test='categoryId > 0'> AND pc.category_id = #{categoryId} </if>"
+            + "<if test='name != null and name != \"\"'> AND p.name LIKE concat('%', #{name}, '%')</if>"
+            + "</where>"
+            + "</script>")
+    @Results(id = "getProductCountByCategory")
+    public int getProductCountByCategory(Product input);
 }

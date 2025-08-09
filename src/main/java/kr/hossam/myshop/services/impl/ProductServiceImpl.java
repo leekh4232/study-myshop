@@ -34,4 +34,20 @@ public class ProductServiceImpl implements ProductService {
         // 조회된 상품 목록 반환
         return products;
     }
+
+    @Override
+    public int getProductCount(Product input) throws Exception {
+        int count = 0;
+
+        if (input != null && input.getCategoryId() > 0) {
+            // 카테고리 ID가 설정되어 있다면 해당 카테고리에 속한 상품 개수 조회
+            count = productMapper.getProductCount(input);
+        } else {
+            // 카테고리 ID가 설정되어 있지 않다면 전체 상품 개수 조회
+            count = productMapper.getProductCount(input);
+        }
+
+        // 조회된 상품 개수 반환
+        return count;
+    }
 }
