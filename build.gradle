@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+    id 'war'
 	id 'org.springframework.boot' version '3.5.4'
     // id 'org.springframework.boot' version '3.3.5'
 	id 'io.spring.dependency-management' version '1.1.7'
@@ -39,6 +40,9 @@ dependencies {
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.4'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
+    // WAR 배포를 위한 의존성
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
 	/** 직접 추가하는 부분 */
 	// UserAgent Parser 라이브러리
 	implementation 'com.github.ua-parser:uap-java:1.6.1'
@@ -53,6 +57,10 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-jdbc'
 	// [신규] Restful API 문서 자동화
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+}
+
+war {
+    archiveFileName = "${archiveBaseName.get()}-${archiveVersion.get()}.${archiveExtension.get()}"
 }
 
 tasks.named('test') {
