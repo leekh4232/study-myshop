@@ -41,7 +41,7 @@ public class ProductServiceImpl implements ProductService {
 
         if (input != null && input.getCategoryId() > 0) {
             // 카테고리 ID가 설정되어 있다면 해당 카테고리에 속한 상품 개수 조회
-            count = productMapper.getProductCount(input);
+            count = productMapper.getProductCountByCategory(input);
         } else {
             // 카테고리 ID가 설정되어 있지 않다면 전체 상품 개수 조회
             count = productMapper.getProductCount(input);

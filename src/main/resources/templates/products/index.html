@@ -28,7 +28,7 @@
                 </form>
             </div>
 
-            <!-- 상품목록 시작 -->
+            <!-- 상품 목록 시작 -->
             <div class="product-card" th:each="p : ${products}">
                 <span class="discount-badge" th:if="${p.discount > 0}">
                     <span th:text="${p.discount}" />% OFF
@@ -44,7 +44,7 @@
                     <strong th:text="|₩${p.price}|" />
                 </p>
             </div>
-            <!--// 상품목록 끝 -->
+            <!--// 상품 목록 끝 -->
 
             <!-- 페이지 번호 -->
             <ul class="pagination">
