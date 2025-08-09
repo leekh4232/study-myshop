@@ -83,7 +83,17 @@ public class MyApiResponseAdvice implements ResponseBodyAdvice<Object> {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> myExceptionHandler(
             Exception e,
-            WebRequest request) {
+            WebRequest request) throws Exception {
+        // RestController 타입이 아닐 경우 예외 처리하지 않고 null 반환
+        Object handler = request.getAttribute("org.springframework.web.servlet.HandlerMapping.bestMatchingHandler", 0);
+        if (handler instanceof org.springframework.web.method.HandlerMethod handlerMethod) {
+            Class<?> beanType = handlerMethod.getBeanType();
+            if (!beanType.isAnnotationPresent(org.springframework.web.bind.annotation.RestController.class)) {
+                // RestController가 아니면 기존 view 처리 (예외를 다시 던져 DispatcherServlet이 처리하도록)
+                throw e;
+            }
+        }
+
         ServletWebRequest servletWebRequest = (ServletWebRequest) request;
 
         // 기본 상태 코드는 INTERNAL_SERVER_ERROR로 설정

@@ -14,7 +14,7 @@ public class AccountController {
      *
      * @return 계정 관련 페이지의 뷰 이름
      */
-    @GetMapping({"/", "/account"})
+    @GetMapping("/account")
     public String index() {
         return "account/index";
     }
