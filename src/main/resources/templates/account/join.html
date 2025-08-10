@@ -7,8 +7,7 @@
 </head>
 
 <body>
-    <!-- 로딩바 -->
-    <img th:src="@{/assets/img/loading.gif}" id="loader" />
+    <th:block th:replace="~{_fragments/header}" />
 
     <!-- 회원가입 폼 -->
     <div class="account-container">
@@ -103,6 +102,7 @@
             <p>이미 계정이 있으신가요? <a th:href="@{/account/login}">로그인</a></p>
         </div>
     </div>
+    <th:block th:replace="~{_fragments/footer}" />
 
     <th:block th:replace="~{_fragments/_scripts :: my-scripts}" />
     <script>

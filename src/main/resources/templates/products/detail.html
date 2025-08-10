@@ -3,7 +3,7 @@
 <html lang="ko" translate="no" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <th:block th:replace="~{_fragments/_head :: my-head('상품목록')}" />
+    <th:block th:replace="~{_fragments/_head :: my-head('상품상세')}" />
     <link rel="stylesheet" th:href="@{/assets/css/product.css}" />
 </head>
 
@@ -28,10 +28,125 @@
 
             <!-- 상품 상세 정보 -->
             <div class="product-info">
-                <pre th:text="${product.toString()}" />
+                <!-- 상품 메인 정보 섹션 -->
+                <div class="product-detail-container">
+                    <!-- 상품 이미지 섹션 -->
+                    <div class="product-image-section">
+                        <img class="product-main-image" th:src="${@fileHelper.getFileUrl(product.imageUrl)}" th:alt="${product.name}">
+                    </div>
+
+                    <!-- 상품 정보 섹션 -->
+                    <div class="product-info-section">
+                        <h1 class="product-title" th:text="${product.name}"></h1>
+
+                        <div class="product-summary" th:text="${product.summary}"></div>
+
+                        <!-- 가격 정보 -->
+                        <div class="product-price-section">
+                            <div th:if="${product.discount > 0}">
+                                <div class="original-price" th:text="|₩${#numbers.formatInteger(product.price, 0, 'COMMA')}|"></div>
+                                <div class="current-price">
+                                    <span th:text="|₩${#numbers.formatInteger(product.price - (product.price * product.discount / 100), 0, 'COMMA')}|"></span>
+                                    <span class="discount-rate" th:text="|${product.discount}% OFF|"></span>
+                                </div>
+                            </div>
+                            <div th:unless="${product.discount > 0}">
+                                <div class="current-price" th:text="|₩${#numbers.formatInteger(product.price, 0, 'COMMA')}|"></div>
+                            </div>
+                        </div>
+
+                        <!-- 상품 옵션 -->
+                        <div class="product-options" th:if="${product.options != null and !product.options.isEmpty()}">
+                            <div class="option-group" th:each="entry : ${product.options}">
+                                <label class="option-label" th:text="${entry.key}"></label>
+                                <div class="option-values">
+                                    <span class="option-value" th:each="option : ${entry.value}"
+                                          th:text="${option.value}"
+                                          th:data-option-id="${option.id}"
+                                          th:data-option-name="${entry.key}"
+                                          onclick="selectOption(this)"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 조합 추가 버튼 -->
+                        <button type="button" class="add-combination-btn" onclick="addCombination()" id="addCombinationBtn">
+                            선택한 옵션 조합 추가 (수량: 1개)
+                        </button>
+
+                        <!-- 선택된 옵션 조합 목록 -->
+                        <div class="option-combinations">
+                            <div class="combination-header">선택한 상품</div>
+                            <div class="combination-list" id="combinationList">
+                                <div class="empty-combinations">
+                                    옵션을 선택하고 "선택한 옵션 조합 추가" 버튼을 눌러주세요.
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 총 주문 금액 -->
+                        <div class="total-summary" id="totalSummary" style="display: none;">
+                            <div class="total-summary-title">주문 정보</div>
+                            <div class="total-summary-content">
+                                <span class="total-quantity" id="totalQuantity">총 0개</span>
+                                <span class="total-price" id="totalPrice">₩0</span>
+                            </div>
+                        </div>
+
+                        <!-- 구매 버튼 -->
+                        <div class="action-buttons">
+                            <button type="button" class="btn-cart" onclick="addAllToCart()">장바구니 담기</button>
+                            <button type="button" class="btn-buy" onclick="buyNow()">바로구매</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 상품 상세 탭 -->
+                <div class="product-tabs">
+                    <div class="tab-headers">
+                        <div class="tab-header active" data-target="detail">상품상세</div>
+                        <div class="tab-header" data-target="delivery">배송정보</div>
+                    </div>
+
+                    <div class="tab-content">
+                        <!-- 상품 상세 탭 -->
+                        <div id="detail-tab" class="tab-pane active">
+                            <!-- MD Comment 섹션 -->
+                            <div class="md-comment-section" th:if="${product.mdComment != null and !#strings.isEmpty(product.mdComment)}">
+                                <div class="md-comment-title">MD's COMMENT</div>
+                                <div class="md-comment-content" th:text="${product.mdComment}"></div>
+                            </div>
+
+                            <!-- 구분선 -->
+                            <hr class="content-divider">
+
+                            <!-- 상품 상세 내용 -->
+                            <div class="product-content" th:utext="${#strings.replace(product.content, '&lt;img src=&quot;/products', '&lt;img src=&quot;/files/products')}"></div>
+                        </div>
+
+                        <!-- 배송 정보 탭 -->
+                        <div id="delivery-tab" class="tab-pane">
+                            <div class="delivery-info" th:text="${product.deliveryInfo}"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
+    <th:block th:replace="~{_fragments/footer}" />
+
+    <!-- JavaScript 파일 참조 및 초기화 -->
+    <script th:src="@{/assets/js/FetchHelper.js}"></script>
+    <script th:inline="javascript">
+        const productData = {
+            id: [[${product.id}]],
+            name: [[${product.name}]],
+            price: [[${product.price}]],
+            discount: [[${product.discount}]]
+        };
+    </script>
+    <script th:src="@{/assets/js/product_detail.js}"></script>
 </body>
 
 </html>
