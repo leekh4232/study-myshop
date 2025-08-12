@@ -63,25 +63,13 @@
                                     <span class="option-value" th:each="option : ${entry.value}"
                                           th:text="${option.value}"
                                           th:data-option-id="${option.id}"
-                                          th:data-option-name="${entry.key}"
-                                          onclick="selectOption(this)"></span>
+                                          th:data-option-name="${entry.key}"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 조합 추가 버튼 -->
-                        <button type="button" class="add-combination-btn" onclick="addCombination()" id="addCombinationBtn">
-                            선택한 옵션 조합 추가 (수량: 1개)
-                        </button>
-
                         <!-- 선택된 옵션 조합 목록 -->
-                        <div class="option-combinations">
-                            <div class="combination-header">선택한 상품</div>
-                            <div class="combination-list" id="combinationList">
-                                <div class="empty-combinations">
-                                    옵션을 선택하고 "선택한 옵션 조합 추가" 버튼을 눌러주세요.
-                                </div>
-                            </div>
+                        <div class="option-combinations" id="combinationList">
                         </div>
 
                         <!-- 총 주문 금액 -->

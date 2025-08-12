@@ -539,6 +539,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     overflow: hidden;
+    display: none;
 }
 
 .combination-header {
@@ -547,11 +548,6 @@
     border-bottom: 1px solid #ddd;
     font-weight: bold;
     color: #333;
-}
-
-.combination-list {
-    max-height: 200px;
-    overflow-y: auto;
 }
 
 .combination-item {
@@ -575,6 +571,13 @@
     font-size: 14px;
     color: #333;
     margin-bottom: 4px;
+
+    .combination-option:not(:last-child)::after {
+        content: " / ";
+        display: inline-block;
+        margin: 0 4px;
+        color: #ff5252;
+    }
 }
 
 .combination-price {

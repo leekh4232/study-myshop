@@ -287,16 +287,6 @@ const setCombinationQuantity = (combinationId, newQuantity) => {
 };
 
 /**
- * 특정 조합을 목록에서 제거
- * @param {number} combinationId - 제거할 조합 ID
- */
-const removeCombination = (combinationId) => {
-    // 해당 ID를 제외한 조합들로 배열 재구성
-    selectedCombinations = selectedCombinations.filter(combo => combo.id !== combinationId);
-    updateCombinationDisplay();
-};
-
-/**
  * 전체 주문 정보 (총 수량, 총 가격) 계산 및 표시
  */
 const updateTotalSummary = () => {
