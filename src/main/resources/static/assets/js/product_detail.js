@@ -285,28 +285,25 @@ const setCombinationQuantity = (combinationId, newQuantity) => {
 };
 
 // ====================================================
-// 장바구니 및 구매 관련 함수들
+// 장바구니 및 구매 관련 버튼 이벤트 핸들러
 // ====================================================
 
 /**
- * 선택된 모든 조합을 장바구니에 담기
- * fetchHelper.post를 사용한 Ajax 요청
+ * 선택된 상품 정보를 FormData 형태로 반환
+ * @returns {FormData|null} - FormData 객체 또는 null
  */
-const addAllToCart = async () => {
-    // 선택된 조합이 없으면 경고 메시지
+function getProductFormData() {
+    // 선택된 조합이 없으면 null 반환
     if (selectedCombinations.length === 0) {
-        alert('장바구니에 담을 상품이 없습니다. 먼저 옵션을 선택하고 조합을 추가해주세요.');
-        return;
+        return null;
     }
-
-    const productOptions = new Blob(selectedCombinations, { type: 'application/json' });
-    console.log(productOptions);
 
     // 요청에 필요한 FormData 생성
     const formData = new FormData();
     formData.append('productId', productData.id);       // 상품 ID
     formData.append('productName', productData.name);   // 상품명
 
+    // 상품 옵션 하나를 `|`로 조합하여 formData에 추가
     selectedCombinations.forEach((v, i) => {
         let optionValue = "";
         Object.keys(v).forEach((vv, ii) => {
@@ -314,56 +311,36 @@ const addAllToCart = async () => {
         });
         // 마지막 파이프(|) 제거
         optionValue = optionValue.slice(0, -1);
-        formData.append(`optionValue[${i}]`, optionValue);
+        console.log(`${i}번째 옵션: ${optionValue}`);
+        formData.append(`options`, optionValue);
     });
 
-    // Ajax 요청 직전 상태의 데이터 로깅
-    console.group('=== 장바구니 추가 요청 데이터 ===');
-    console.log(Object.fromEntries(formData.entries()));
-    console.groupEnd();
-};
+    return formData;
+}
 
 /**
- * 선택된 조합으로 바로구매 처리
+ * 선택된 모든 조합을 장바구니에 담기
  */
-const buyNow = () => {
-    // 선택된 조합이 없으면 경고 메시지
-    if (selectedCombinations.length === 0) {
-        alert('구매할 상품이 없습니다. 먼저 옵션을 선택하고 조합을 추가해주세요.');
+document.querySelector(".btn-cart").addEventListener("click", (e) => {
+    e.preventDefault();
+
+    const formData = getProductFormData();
+    if (!formData) {
+        alert("장바구니에 담을 상품이 없습니다. 옵션을 선택해주세요.");
         return;
     }
 
-    // 상품 정보를 전역 변수에서 가져오기
-    const productId = window.productData?.id || 0;
-    const productName = window.productData?.name || '';
+    try {
+        fetchHelper.post('/api/cart/add', formData);
+    } catch (e) {
+        console.error('장바구니 추가 중 오류 발생:', e);
+        alert('장바구니에 상품을 추가하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+        return;
+    }
 
-    // 바로구매를 위한 데이터 준비
-    const orderData = {
-        productId: productId,
-        productName: productName,
-        combinations: selectedCombinations.map(combo => ({
-            optionId: Object.values(combo.options).map(opt => opt.id).join(','),
-            optionName: Object.keys(combo.options).map(key =>
-                `${key}:${combo.options[key].value}`
-            ).join('|'),
-            quantity: combo.quantity,
-            price: combo.price,
-            totalPrice: combo.price * combo.quantity
-        })),
-        totalQuantity: selectedCombinations.reduce((sum, combo) => sum + combo.quantity, 0),
-        totalAmount: selectedCombinations.reduce((sum, combo) => sum + (combo.price * combo.quantity), 0)
-    };
-
-    // 바로구매 데이터 로깅
-    console.log('=== 바로구매 요청 데이터 ===');
-    console.log('요청 URL: /order/direct');
-    console.log('요청 방식: POST');
-    console.log('요청 데이터:', JSON.stringify(orderData, null, 2));
-    console.log('========================');
-
-    // TODO: 주문 페이지로 이동 또는 Ajax 요청
-    // window.location.href = '/order/direct?data=' + encodeURIComponent(JSON.stringify(orderData));
-
-    // 임시 메시지 (실제 구현 전까지)
-    alert('주문 페이지로 이동합니다.');
-};
+    // 성공 메시지
+    if (confirm('장바구니에 상품이 추가되었습니다. 장바구니로 이동하시겠습니까?')) {
+        // 장바구니 페이지로 이동
+        window.location.href = '/cart';
+    }
+});
